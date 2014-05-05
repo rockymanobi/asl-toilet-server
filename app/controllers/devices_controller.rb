@@ -8,5 +8,6 @@ class DevicesController < ApplicationController
 
   private
   def set_device
+    @device = Device.find( params[:id] )
   end
 end

@@ -38,4 +38,5 @@ class SampleRequestsController < ApplicationController
   def member_params
     params.require(:member).permit(:name)
   end
+
 end
