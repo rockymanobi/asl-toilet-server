@@ -1,6 +1,6 @@
 window.reload = function( interval ){
   var intervaltime = interval || 1000;
-  setInterval( function(){
+  setTimeout( function(){
     location.reload();
   }, 1000);
 }
