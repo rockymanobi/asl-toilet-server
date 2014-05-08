@@ -287,7 +287,7 @@ ToiletApp.checkDoor = function( door){
 
   if( door.hasChangedToVacantState() ) R.push( door.id + "-VACANT!!");
   if( door.hasChangedToOccupiedState() ) R.push( door.id + "-OCCUPIED!!");
-  console.log( door.state );
+  console.log( door.id +  ":" + door.state );
 
 };
 
@@ -313,8 +313,12 @@ function onInit(){
   
   var d1Sensor = new ToiletApp.DoorSensor( "d1", { pin: A1 } );
   var stall1 = new ToiletApp.Stall( {id: "d1", doorSensor: d1Sensor });
+
+  var d2Sensor = new ToiletApp.DoorSensor( "d2", { pin:A2 } );
+  var stall2 = new ToiletApp.Stall( {id: "d2", doorSensor: d2Sensor });
   
   ToiletApp.checkDoorTimer( stall1 );
+  ToiletApp.checkDoorTimer( stall2 );
   LED1.write(false);
   setTimeout( function(){ R.start(); LED1.write(true);}, 5000 );
 }
