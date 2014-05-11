@@ -1,6 +1,4 @@
 
-
-
 /*
  * [stall] chiefly US :
  *   a small, enclosed area with room for one person in a bathroom 
@@ -10,14 +8,14 @@
 ToiletApp.Stall = ( function(){
   function Stall( options ){
     var statuses = ToiletApp.Stall.STATUSES;
-    this.state = statuses.initial;
-    this.beforeState = statuses.initial;
+    this.state = statuses.unknown;
+    this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
   }
 
   Stall.STATUSES = {
-    initial: "initial",
+    unknown: "unknown",
     vacant: "vacant",
     maybe_occupied: "maybe_occupied",
     occupied: "occupied",
@@ -26,7 +24,7 @@ ToiletApp.Stall = ( function(){
 
   Stall.prototype = {
   
-    isInitial: function(){ return this.state == Stall.STATUSES.initial; },
+    isUnknown: function(){ return this.state == Stall.STATUSES.unknown; },
     isMaybeVacant: function(){ return this.state == Stall.STATUSES.maybe_vacant; },
     isVacant: function(){ return this.state == Stall.STATUSES.vacant; },
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
@@ -35,7 +33,7 @@ ToiletApp.Stall = ( function(){
     _getNextState: function(){
       var statuses = ToiletApp.Stall.STATUSES;
       var nextState;
-      if( this.isInitial() ){
+      if( this.isUnknown() ){
         if( this.doorSensor.isOpen() ){
           nextState = statuses.vacant;
         }else{
@@ -77,14 +75,14 @@ ToiletApp.Stall = ( function(){
     hasChangedToOccupiedState: function(){
       var statuses = Stall.STATUSES;
       var openToClose = this.beforeState == statuses.maybe_occupied && this.state == statuses.occupied;
-      var initialToClose = this.beforeState == "initial" && statuses.initial == statuses.occupied;
-      return openToClose || initialToClose;
+      var unknownToClose = this.beforeState == statuses.unknown && this.state == statuses.occupied;
+      return openToClose || unknownToClose;
     },
     hasChangedToVacantState: function(){
       var statuses = Stall.STATUSES;
       var closeToOpen = this.beforeState == statuses.maybe_vacant && this.state == statuses.vacant;
-      var initialToOpen = this.beforeState == statuses.initial && this.state == statuses.vacant;
-      return closeToOpen || initialToOpen;
+      var unknownToOpen = this.beforeState == statuses.unknown && this.state == statuses.vacant;
+      return closeToOpen || unknownToOpen;
     }
   };
   return Stall;

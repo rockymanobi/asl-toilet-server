@@ -10,8 +10,8 @@ ToiletApp.checkDoor = function( door){
 
   door.toNextState();
 
-  if( door.hasChangedToVacantState() ) R.push( door.id + "-VACANT!!");
-  if( door.hasChangedToOccupiedState() ) R.push( door.id + "-OCCUPIED!!");
+  if( door.hasChangedToVacantState() ) R.push( door );
+  if( door.hasChangedToOccupiedState() ) R.push( door );
   console.log( door.id +  ":" + door.state );
 
 };
@@ -28,6 +28,19 @@ var statuses = {
   "unexpected": 7,
 };
 
+
+
+function hoge(  stallDef ){
+    console.log( "======================" );
+    console.log( stallDef );
+    console.log( stallDef.pin );
+    var pin = stallDef.pin;
+  
+   var sensor = new ToiletApp.DoorSensor( "d1", { pin: pin });
+    var stall = new ToiletApp.Stall( {id: stallDef.id, doorSensor: sensor });
+    ToiletApp.checkDoorTimer( stall );
+}
+
 var R = void(0);
 var wifi = void(0);
 function onInit(){
@@ -36,14 +49,17 @@ function onInit(){
   wifi = new ToiletApp.Wifi();
   R = new ToiletApp.SyncRequestProcessor( {syncer: syncer} );
   
-  var d1Sensor = new ToiletApp.DoorSensor( "d1", { pin: A1 } );
-  var stall1 = new ToiletApp.Stall( {id: "d1", doorSensor: d1Sensor });
+  var stalls = ToiletApp.def.room.stalls;
+  var stallsLength = stalls.length; 
 
-  var d2Sensor = new ToiletApp.DoorSensor( "d2", { pin:A2 } );
-  var stall2 = new ToiletApp.Stall( {id: "d2", doorSensor: d2Sensor });
-  
-  ToiletApp.checkDoorTimer( stall1 );
-  ToiletApp.checkDoorTimer( stall2 );
+  // TODO : method に
+  for( var i=0; i < stallsLength ; i++ ){
+    var stallDef = stalls[i];
+    hoge( stallDef );
+  }
+
+
+
   LED1.write(false);
   setTimeout( function(){ R.start(); LED1.write(true);}, 5000 );
 }

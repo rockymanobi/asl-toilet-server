@@ -41,14 +41,36 @@ LedStatusVisualizer = (function(){
 
 ToiletApp = {};
 ToiletApp.def = {
+
+  /*
   wifi: {
     id: "HWD14_904E2B402303",
     password: "8a6g1tijbi2t8ah"
   },
+  */
+
+  wifi: {
+    id: "BCW710J-83EEA-G",
+    password: "d5433a48fe448"
+  },
 
   server: {
-    host: "192.168.100.100",
+    //host: "192.168.100.100",
+    host: "192.168.0.10",
     port: "3000"
+  },
+
+  device: {
+    id: 'asl-device'
+  }
+  ,
+
+  room: {
+    id: 'asl-3f',
+    stalls: [
+      { id: 'asl-3f-front', pin: A1 } ,
+      { id: 'asl-3f-back', pin: A2 }
+    ]
   }
 
 }
@@ -132,7 +154,7 @@ ToiletApp.Syncer = (function(){
       var serverDef = ToiletApp.def.server;
       var payload = {
         id: "",
-        status: target
+        status: target.state
       };
       var urlpayload = "id=" + payload.id +"&status=" + payload.status;
  
@@ -180,8 +202,6 @@ ToiletApp.DoorSensor = (function(){
   return DoorSensor;
 })();
 
-
-
 /*
  * [stall] chiefly US :
  *   a small, enclosed area with room for one person in a bathroom 
@@ -192,14 +212,14 @@ ToiletApp.DoorSensor = (function(){
 ToiletApp.Stall = ( function(){
   function Stall( options ){
     var statuses = ToiletApp.Stall.STATUSES;
-    this.state = statuses.initial;
-    this.beforeState = statuses.initial;
+    this.state = statuses.unknown;
+    this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
   }
 
   Stall.STATUSES = {
-    initial: "initial",
+    unknown: "unknown",
     vacant: "vacant",
     maybe_occupied: "maybe_occupied",
     occupied: "occupied",
@@ -208,7 +228,7 @@ ToiletApp.Stall = ( function(){
 
   Stall.prototype = {
   
-    isInitial: function(){ return this.state == Stall.STATUSES.initial; },
+    isUnknown: function(){ return this.state == Stall.STATUSES.unknown; },
     isMaybeVacant: function(){ return this.state == Stall.STATUSES.maybe_vacant; },
     isVacant: function(){ return this.state == Stall.STATUSES.vacant; },
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
@@ -217,7 +237,7 @@ ToiletApp.Stall = ( function(){
     _getNextState: function(){
       var statuses = ToiletApp.Stall.STATUSES;
       var nextState;
-      if( this.isInitial() ){
+      if( this.isUnknown() ){
         if( this.doorSensor.isOpen() ){
           nextState = statuses.vacant;
         }else{
@@ -259,14 +279,14 @@ ToiletApp.Stall = ( function(){
     hasChangedToOccupiedState: function(){
       var statuses = Stall.STATUSES;
       var openToClose = this.beforeState == statuses.maybe_occupied && this.state == statuses.occupied;
-      var initialToClose = this.beforeState == "initial" && statuses.initial == statuses.occupied;
-      return openToClose || initialToClose;
+      var unknownToClose = this.beforeState == statuses.unknown && this.state == statuses.occupied;
+      return openToClose || unknownToClose;
     },
     hasChangedToVacantState: function(){
       var statuses = Stall.STATUSES;
       var closeToOpen = this.beforeState == statuses.maybe_vacant && this.state == statuses.vacant;
-      var initialToOpen = this.beforeState == statuses.initial && this.state == statuses.vacant;
-      return closeToOpen || initialToOpen;
+      var unknownToOpen = this.beforeState == statuses.unknown && this.state == statuses.vacant;
+      return closeToOpen || unknownToOpen;
     }
   };
   return Stall;
@@ -285,8 +305,8 @@ ToiletApp.checkDoor = function( door){
 
   door.toNextState();
 
-  if( door.hasChangedToVacantState() ) R.push( door.id + "-VACANT!!");
-  if( door.hasChangedToOccupiedState() ) R.push( door.id + "-OCCUPIED!!");
+  if( door.hasChangedToVacantState() ) R.push( door );
+  if( door.hasChangedToOccupiedState() ) R.push( door );
   console.log( door.id +  ":" + door.state );
 
 };
@@ -303,6 +323,19 @@ var statuses = {
   "unexpected": 7,
 };
 
+
+
+function hoge(  stallDef ){
+    console.log( "======================" );
+    console.log( stallDef );
+    console.log( stallDef.pin );
+    var pin = stallDef.pin;
+  
+   var sensor = new ToiletApp.DoorSensor( "d1", { pin: pin });
+    var stall = new ToiletApp.Stall( {id: stallDef.id, doorSensor: sensor });
+    ToiletApp.checkDoorTimer( stall );
+}
+
 var R = void(0);
 var wifi = void(0);
 function onInit(){
@@ -311,14 +344,17 @@ function onInit(){
   wifi = new ToiletApp.Wifi();
   R = new ToiletApp.SyncRequestProcessor( {syncer: syncer} );
   
-  var d1Sensor = new ToiletApp.DoorSensor( "d1", { pin: A1 } );
-  var stall1 = new ToiletApp.Stall( {id: "d1", doorSensor: d1Sensor });
+  var stalls = ToiletApp.def.room.stalls;
+  var stallsLength = stalls.length; 
 
-  var d2Sensor = new ToiletApp.DoorSensor( "d2", { pin:A2 } );
-  var stall2 = new ToiletApp.Stall( {id: "d2", doorSensor: d2Sensor });
-  
-  ToiletApp.checkDoorTimer( stall1 );
-  ToiletApp.checkDoorTimer( stall2 );
+  // TODO : method に
+  for( var i=0; i < stallsLength ; i++ ){
+    var stallDef = stalls[i];
+    hoge( stallDef );
+  }
+
+
+
   LED1.write(false);
   setTimeout( function(){ R.start(); LED1.write(true);}, 5000 );
 }

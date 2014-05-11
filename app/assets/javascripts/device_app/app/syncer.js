@@ -8,7 +8,7 @@ ToiletApp.Syncer = (function(){
       var serverDef = ToiletApp.def.server;
       var payload = {
         id: "",
-        status: target
+        status: target.state
       };
       var urlpayload = "id=" + payload.id +"&status=" + payload.status;
  
