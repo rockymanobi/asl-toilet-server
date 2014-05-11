@@ -1,7 +1,8 @@
 
 class SampleRequestsController < ApplicationController
 
-  before_action :set_stall, only: [:show, :edit, :update, :destroy]
+  before_action :set_test_stall, only: [:show, :edit, :update, :destroy]
+  before_action :set_stall, only: [:sample_show]
   
   def index
     @stall = TestStall.first
@@ -9,6 +10,13 @@ class SampleRequestsController < ApplicationController
   end
 
 
+  def sample_show
+    @device = Device.find_by( name: "asl1" )
+    respond_to do |format|
+      format.html { render }
+      format.json { render @stall }
+    end
+  end
   def show
     @device = Device.find_by( name: "asl1" )
     respond_to do |format|
@@ -32,6 +40,9 @@ class SampleRequestsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_stall
+    @stall = Stall.find_by( name: params[:id])
+  end
+  def set_test_stall
     @stall = TestStall.find(params[:id])
   end
 

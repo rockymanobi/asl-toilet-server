@@ -14,13 +14,13 @@
  *= require_self
  */
 p.STALL{
-  font-size: 72px;
+  font-size: 40px;
   font-weight: bold;
-  display: block;
+  display: inline-block;
   text-align: center;
   margin: 0px auto;
-  width: 500px;
-  padding: 200px 0px;
+  width: 300px;
+  padding: 100px 0px;
   color: white;
 }
 
@@ -30,4 +30,7 @@ p.VACANT{
 
 p.OCCUPIED{
   background-color: #ff3333;
+}
+p.UNKNOWN{
+  background-color: #888888;
 }

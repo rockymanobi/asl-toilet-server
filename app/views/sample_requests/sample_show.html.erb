@@ -1,0 +1,11 @@
+
+
+<% Stall.all.each do |s|%>
+<%= render 'stall', stall: s %>
+<% end %>
+
+<%= javascript_tag do %>
+  window.reload(1000);
+<% end %>
+
+
