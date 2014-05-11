@@ -6,5 +6,7 @@ class CreateDevices < ActiveRecord::Migration
       t.datetime :status_updated_at
       t.timestamps
     end
+    
+    add_index :devices, :name, unique: true
   end
 end

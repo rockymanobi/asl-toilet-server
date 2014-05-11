@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20140511034710) do
     t.datetime "updated_at"
   end
 
+  add_index "devices", ["name"], name: "index_devices_on_name", unique: true
+
   create_table "stalls", force: true do |t|
     t.string   "name"
     t.string   "display_name"
@@ -28,6 +30,8 @@ ActiveRecord::Schema.define(version: 20140511034710) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "stalls", ["name"], name: "index_stalls_on_name", unique: true
 
   create_table "test_stalls", force: true do |t|
     t.string   "status"

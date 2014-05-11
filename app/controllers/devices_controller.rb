@@ -7,7 +7,7 @@ class DevicesController < ApplicationController
   end
 
   def heart_beat
-    @device.status = Device::STATUS[:running]
+    @device.status = Device::STATUSES[:running]
     @device.status_updated_at = Time.now 
     @device.save!
     render json: @device

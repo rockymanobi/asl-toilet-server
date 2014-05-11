@@ -7,5 +7,6 @@ class CreateStalls < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :stalls, :name, unique: true
   end
 end
