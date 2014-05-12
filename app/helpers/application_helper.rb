@@ -11,8 +11,8 @@ module ApplicationHelper
 
   def message_for_stalls_status( stalls_status )
     { 
-      Stall::STATUSES[:vacant] => "開いてます",
-      Stall::STATUSES[:occupied] => "閉まってます",
+      Stall::STATUSES[:vacant] => "VACANT",
+      Stall::STATUSES[:occupied] => "OCCUPIED",
       Stall::STATUSES[:unknown] => "Unknown"
     }[ stalls_status ]
   end
