@@ -15,6 +15,7 @@ class SampleRequestsController < ApplicationController
       format.json { render @stall }
     end
   end
+
   def show
     @device = Device.find_by( name: "asl1" )
     respond_to do |format|
