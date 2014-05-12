@@ -3,8 +3,7 @@ class DevicesController < ApplicationController
   before_action :set_device, only: [:stop_monitoring,:start_monitoring , :heart_beat]
 
   def start_monitoring
-    # TODO: チェックしているすべてのStallのステータスをunknownにする
-    p params[:stall_ids]
+    @device.monitoring_stalls << Stall.where( name: params[:stall_names] )
     @device.status = Device::STATUSES[:running]
     @device.save!
     render json: nil
@@ -20,7 +19,7 @@ class DevicesController < ApplicationController
   def stop_monitoring
     @device.status = Device::STATUSES[:sleep]
     @device.save!
-    # TODO: チェックしているすべてのStallのステータスをunknownにする
+    @device.clear_all_stalls
     render json: @device
   end
 

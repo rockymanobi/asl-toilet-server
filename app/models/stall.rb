@@ -1,4 +1,5 @@
 class Stall < ActiveRecord::Base
+  belongs_to :device
 
   STATUSES = {
     unknown: "unknown", 
