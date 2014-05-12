@@ -1,4 +1,41 @@
 
+
+function heartBeatTimer(){
+  setInterval( heartBeat, 5000 );
+}
+
+function heartBeat(){
+  var serverDef = ToiletApp.def.server;
+  var payload = {
+    method: 'PUT',
+    status: 'running'
+  };
+  var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
+
+  var options = {
+    host: serverDef.host,
+    port: serverDef.port,
+    path: '/devices/' + ToiletApp.def.device.id + '/heart_beat',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlpayload.length
+    },
+    method: 'POST'
+  };
+
+  var http = this.http;
+
+  var req = http.request( options, function(res) {
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+
+  req.write( urlpayload );
+  req.end();
+};
+
+
 ToiletApp.checkDoorTimer = function( door ){
   ToiletApp.checkDoor( door);
   setTimeout( function(){
@@ -61,7 +98,7 @@ function onInit(){
 
 
   LED1.write(false);
-  setTimeout( function(){ R.start(); LED1.write(true);}, 5000 );
+  setTimeout( function(){ heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
 }
 
 onInit();

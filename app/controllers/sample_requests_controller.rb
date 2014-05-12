@@ -1,4 +1,3 @@
-
 class SampleRequestsController < ApplicationController
 
   before_action :set_test_stall, only: [:show, :edit, :update, :destroy]
@@ -9,9 +8,8 @@ class SampleRequestsController < ApplicationController
     render json: @stall.status;
   end
 
-
   def sample_show
-    @device = Device.find_by( name: "asl1" )
+    @device = Device.find_by( name: "asl" )
     respond_to do |format|
       format.html { render }
       format.json { render @stall }

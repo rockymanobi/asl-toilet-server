@@ -1,4 +1,5 @@
 
+<div><%= message_for_device_status( @device.status ) %></div>
 
 <% Stall.all.each do |s|%>
 <%= render 'stall', stall: s %>

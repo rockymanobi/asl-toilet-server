@@ -42,37 +42,35 @@ LedStatusVisualizer = (function(){
 ToiletApp = {};
 ToiletApp.def = {
 
-  /*
   wifi: {
     id: "HWD14_904E2B402303",
     password: "8a6g1tijbi2t8ah"
   },
-  */
 
+ /*
   wifi: {
     id: "BCW710J-83EEA-G",
     password: "d5433a48fe448"
   },
+  */
 
   server: {
-    //host: "192.168.100.100",
-    host: "192.168.0.10",
+    host: "192.168.100.100",
+    //host: "192.168.0.10",
     port: "3000"
   },
 
   device: {
-    id: 'asl-device'
-  }
-  ,
+    id: 'asl'
+  },
 
   room: {
     id: 'asl-3f',
     stalls: [
-      { id: 'asl-3f-front', pin: A1 } ,
-      { id: 'asl-3f-back', pin: A2 }
+      { id: 'asl1', pin: A1 } ,
+      { id: 'asl2', pin: A2 }
     ]
   }
-
 }
 
 ;
@@ -153,15 +151,15 @@ ToiletApp.Syncer = (function(){
     sync: function( target ){
       var serverDef = ToiletApp.def.server;
       var payload = {
-        id: "",
+        method: 'PUT',
         status: target.state
       };
-      var urlpayload = "id=" + payload.id +"&status=" + payload.status;
+      var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
  
       var options = {
         host: serverDef.host,
         port: serverDef.port,
-        path: '/sample_requests',
+        path: '/stalls/' + target.id + '/sync_status',
         headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Content-Length': urlpayload.length
@@ -294,6 +292,43 @@ ToiletApp.Stall = ( function(){
 
 
 
+
+function heartBeatTimer(){
+  setInterval( heartBeat, 5000 );
+}
+
+function heartBeat(){
+  var serverDef = ToiletApp.def.server;
+  var payload = {
+    method: 'PUT',
+    status: 'running'
+  };
+  var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
+
+  var options = {
+    host: serverDef.host,
+    port: serverDef.port,
+    path: '/devices/' + ToiletApp.def.device.id + '/heart_beat',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlpayload.length
+    },
+    method: 'POST'
+  };
+
+  var http = this.http;
+
+  var req = http.request( options, function(res) {
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+
+  req.write( urlpayload );
+  req.end();
+};
+
+
 ToiletApp.checkDoorTimer = function( door ){
   ToiletApp.checkDoor( door);
   setTimeout( function(){
@@ -356,7 +391,7 @@ function onInit(){
 
 
   LED1.write(false);
-  setTimeout( function(){ R.start(); LED1.write(true);}, 5000 );
+  setTimeout( function(){ heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
 }
 
 onInit();

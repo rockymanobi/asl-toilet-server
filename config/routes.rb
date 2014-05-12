@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :devices do
     member do
       put :heart_beat
+      put :stop
     end
   end
 

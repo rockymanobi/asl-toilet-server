@@ -1,6 +1,6 @@
 
 class DevicesController < ApplicationController
-  before_action :set_device, only: [:heart_beat]
+  before_action :set_device, only: [:stop, :heart_beat]
 
   def start
     # TODO: チェックしているすべてのStallのステータスをunknownにする
@@ -14,7 +14,10 @@ class DevicesController < ApplicationController
   end
 
   def stop
+    @device.status = Device::STATUSES[:sleep]
+    @device.save!
     # TODO: チェックしているすべてのStallのステータスをunknownにする
+    render json: @device
   end
 
   private

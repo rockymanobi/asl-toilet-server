@@ -1,3 +1,4 @@
+
 module ApplicationHelper
 
   def class_name_by_stalls_status( stalls_status )
@@ -14,6 +15,14 @@ module ApplicationHelper
       Stall::STATUSES[:occupied] => "閉まってます",
       Stall::STATUSES[:unknown] => "分かりません"
     }[ stalls_status ]
+  end
+
+  def message_for_device_status( device_status )
+    {
+      Device::STATUSES[:sleep] => "現在監視をしていません",
+      Device::STATUSES[:running] => "監視中です",
+      Device::STATUSES[:error] => "エラーが発生しています"
+    }[device_status]
   end
 
 end
