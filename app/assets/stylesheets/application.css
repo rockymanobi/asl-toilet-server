@@ -15,7 +15,6 @@
  */
 p.STALL{
   font-size: 40px;
-  font-weight: bold;
   display: inline-block;
   text-align: center;
   margin: 0px auto;
@@ -33,4 +32,9 @@ p.OCCUPIED{
 }
 p.UNKNOWN{
   background-color: #888888;
+}
+
+
+.STALLS_NAME, .STALLS_STATUS{
+  font-family: 'Yanone Kaffeesatz', sans-serif;
 }

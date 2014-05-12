@@ -13,7 +13,7 @@ module ApplicationHelper
     { 
       Stall::STATUSES[:vacant] => "開いてます",
       Stall::STATUSES[:occupied] => "閉まってます",
-      Stall::STATUSES[:unknown] => "分かりません"
+      Stall::STATUSES[:unknown] => "Unknown"
     }[ stalls_status ]
   end
 
