@@ -37,6 +37,7 @@ ToiletApp.SyncRequestProcessor = (function(){
       this._httpActionTimer( this );
     },
     stop: function(){
+      this.requests = [];
       clearTimeout( this.timer );
     },
     push: function( val ){

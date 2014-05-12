@@ -1,5 +1,5 @@
 ToiletApp.Wifi = (function(){
-  function Wifi(){
+  function Wifi( callback ){
     var def = ToiletApp.def;
     this.wlan = require("CC3000").connect();
     this.isReady = false;
@@ -8,6 +8,7 @@ ToiletApp.Wifi = (function(){
       if (s=="dhcp") {
         console.log('wifi connected!');
         _this.isReady = true;
+        callback();
       }
     });
   }

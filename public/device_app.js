@@ -75,7 +75,7 @@ ToiletApp.def = {
 
 ;
 ToiletApp.Wifi = (function(){
-  function Wifi(){
+  function Wifi( callback ){
     var def = ToiletApp.def;
     this.wlan = require("CC3000").connect();
     this.isReady = false;
@@ -84,6 +84,7 @@ ToiletApp.Wifi = (function(){
       if (s=="dhcp") {
         console.log('wifi connected!');
         _this.isReady = true;
+        callback();
       }
     });
   }
@@ -130,6 +131,7 @@ ToiletApp.SyncRequestProcessor = (function(){
       this._httpActionTimer( this );
     },
     stop: function(){
+      this.requests = [];
       clearTimeout( this.timer );
     },
     push: function( val ){
@@ -151,10 +153,10 @@ ToiletApp.Syncer = (function(){
     sync: function( target ){
       var serverDef = ToiletApp.def.server;
       var payload = {
-        method: 'PUT',
+        _method: 'PUT',
         status: target.state
       };
-      var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
+      var urlpayload = "_method=" + payload._method +"&status=" + payload.status;
  
       var options = {
         host: serverDef.host,
@@ -294,8 +296,39 @@ ToiletApp.Stall = ( function(){
 
 
 function heartBeatTimer(){
-  setInterval( heartBeat, 5000 );
+  return setInterval( heartBeat, 5000 );
 }
+
+function stopMonitoring(){
+  var serverDef = ToiletApp.def.server;
+  var payload = {
+    method: 'PUT'
+  };
+  var urlpayload = "_method=" + payload.method;
+
+  var options = {
+    host: serverDef.host,
+    port: serverDef.port,
+    path: '/devices/' + ToiletApp.def.device.id + '/stop_monitoring',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlpayload.length
+    },
+    method: 'POST'
+  };
+
+
+  var req = require("http").request( options, function(res) {
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+
+  req.write( urlpayload );
+  req.end();
+};
+
+
 
 function heartBeat(){
   var serverDef = ToiletApp.def.server;
@@ -316,9 +349,8 @@ function heartBeat(){
     method: 'POST'
   };
 
-  var http = this.http;
 
-  var req = http.request( options, function(res) {
+  var req = require("http").request( options, function(res) {
     res.on('data', function (chunk) {
       console.log('BODY: ' + chunk);
     });
@@ -371,12 +403,50 @@ function hoge(  stallDef ){
     ToiletApp.checkDoorTimer( stall );
 }
 
+var wifiConnectedCallback = function(){
+  console.log("callback");
+
+  var serverDef = ToiletApp.def.server;
+  var stallsDef = ToiletApp.def.room.stalls;
+
+  var stallsRequestString = "";
+  for( var i = 0; i < stallsDef.length; i ++){ 
+    stallsRequestString += ( "&stall_names[]=" + stallsDef[i].id );
+  }
+
+  var payload = {
+    _method: 'PUT'
+  };
+  var urlpayload = "_method=" + payload._method + stallsRequestString;
+
+  var options = {
+    host: serverDef.host,
+    port: serverDef.port,
+    path: '/devices/' + ToiletApp.def.device.id + '/start_monitoring',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlpayload.length
+    },
+    method: 'POST'
+  };
+
+  var req = require("http").request( options, function(res) {
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+
+  req.write( urlpayload );
+  req.end();
+
+};
+
 var R = void(0);
 var wifi = void(0);
 function onInit(){
   LEDs.show( statuses.started );
   var syncer = new ToiletApp.Syncer();
-  wifi = new ToiletApp.Wifi();
+  wifi = new ToiletApp.Wifi( wifiConnectedCallback );
   R = new ToiletApp.SyncRequestProcessor( {syncer: syncer} );
   
   var stalls = ToiletApp.def.room.stalls;
@@ -390,9 +460,28 @@ function onInit(){
 
 
 
+  var heartBeatInterval = void(0);
   LED1.write(false);
-  setTimeout( function(){ heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
+  setTimeout( function(){ heartBeatInterval = heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
+
+
+  var stopped = false;
+
+  function stopAll(){
+    stopMonitoring();
+    clearInterval(heartBeatInterval);
+    R.stop();
+  }
+  
+  setInterval( function(){
+    if( BTN1.read()  && !stopped ){ 
+      stopped = true;
+      stopAll();
+    }
+  } ,1000);
+
 }
+
 
 onInit();
 
