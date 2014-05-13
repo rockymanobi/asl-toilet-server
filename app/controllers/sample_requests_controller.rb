@@ -14,8 +14,7 @@ class SampleRequestsController < ApplicationController
 
   def listen_heart_beat
 
-    #now = 5.minutes.ago
-    now = 1.minutes.ago
+    now = 5.minutes.ago
     devices = Device.arel_table
     
     ng_devices = Device.where(status: Device::STATUSES[:running]).where( devices[:status_updated_at].lt( now ))
