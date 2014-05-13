@@ -56,8 +56,10 @@ ToiletApp.def = {
 
   server: {
     //host: "192.168.100.100",
-    host: "192.168.0.10",
-    port: "3000"
+    //host: "192.168.0.10",
+    host: "test-toilet.herokuapp.com",
+    //port: "3000"
+    port: "80"
   },
 
   device: {
