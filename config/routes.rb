@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     member do
       get :sample_show
     end
+    collection do
+      post :listen_heart_beat
+    end
   end
 
   resources :devices do

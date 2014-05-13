@@ -2,10 +2,29 @@ class SampleRequestsController < ApplicationController
 
   before_action :set_test_stall, only: [:show, :edit, :update, :destroy]
   before_action :set_stall, only: [:sample_show]
+
+  skip_before_filter :verify_authenticity_token, only: [:listen_heart_beat]
+  
+
   
   def index
     @stall = TestStall.first
     render json: @stall.status;
+  end
+
+  def listen_heart_beat
+
+    #now = 5.minutes.ago
+    now = 1.minutes.ago
+    devices = Device.arel_table
+    
+    ng_devices = Device.where(status: Device::STATUSES[:running]).where( devices[:status_updated_at].lt( now ))
+    p ng_devices.all
+    Stall.where( device: ng_devices).update_all( status: Stall::STATUSES[:unknown] )
+    ng_devices.update_all( status: Device::STATUSES[:error])
+
+    render json: nil
+
   end
 
   def sample_show
