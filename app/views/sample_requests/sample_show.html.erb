@@ -1,5 +1,6 @@
 
 <div><%= message_for_device_status( @device.status ) %></div>
+<div><%=  @device.status_updated_at.strftime("%Y/%m/%d %H:%M:%S") %></div>
 
 <% Stall.all.each do |s|%>
 <%= render 'stall', stall: s %>
@@ -7,6 +8,7 @@
 
 <%= javascript_tag do %>
   setInterval( window.listen_heart_beat_request ,12000);
+  //setTimeout( function(){ location.reload(); } ,1000);
 <% end %>
 
 

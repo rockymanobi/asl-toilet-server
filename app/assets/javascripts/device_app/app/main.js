@@ -91,7 +91,7 @@ var statuses = {
   "": 3,
   "": 4,
   "": 5,
-  "": 6,
+  "stopped": 6,
   "unexpected": 7,
 };
 
@@ -176,6 +176,7 @@ function onInit(){
     stopMonitoring();
     clearInterval(heartBeatInterval);
     R.stop();
+    LEDs.show( statuses.stoped );
   }
   
   setInterval( function(){
