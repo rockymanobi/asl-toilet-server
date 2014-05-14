@@ -6,11 +6,13 @@ class StallsController < ApplicationController
   def index
     render json: nil
   end
+
   def show
     p params[:id]
-    Stall.find_by( name: params[:id] )
-    render json: nil
+    s = Stall.find_by( name: params[:id] )
+    render json: s
   end
+
 
   def sync_status
 
