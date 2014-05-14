@@ -4,6 +4,11 @@
 <div><%=  @device.status_updated_at.strftime("%Y/%m/%d %H:%M:%S") %></div>
 <% end %>
 
+<div id="asl1">
+</div>
+<div id="asl2">
+</div>
+
 <% Stall.all.each do |s|%>
 <%= render 'stall', stall: s %>
 <% end %>

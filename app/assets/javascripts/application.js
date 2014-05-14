@@ -14,8 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //
-//= require underscore/underscore
-//= require backbone/backbone
+//= require backbone.marionette/marionette_main
 //
 //= require sample_requests/listen_heart_beat_request
 
