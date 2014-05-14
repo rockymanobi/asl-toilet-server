@@ -8,6 +8,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :data do
+    collection do
+      get :circle
+    end
+  end
+
   resources :devices do
     member do
       put :heart_beat

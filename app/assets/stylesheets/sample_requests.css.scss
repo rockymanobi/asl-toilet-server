@@ -1,0 +1,182 @@
+$occupiedColor: #eb724d;
+$vacantColor: #65aae5;
+$unknownColor: #cccccc;
+
+
+.MONITOR{
+  padding: 10px 20px;
+}
+
+.DEVICE-STATUS{
+  margin: 5px 0px;
+}
+
+.STALL-MONITOR{
+  display: inline-block;
+
+  .STALL{
+    font-weight: light;
+    font-family: 'Open Sans', sans-serif;
+    //font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    margin: 0px 40px 10px 0px;
+    width: 300px;
+
+    .SUB-BOX{
+      margin-left: 20px;
+    }
+
+    .NAME{
+      font-weight: normal;
+      color: #888888;
+    }
+
+    .LAST-MONITORED{
+      font-size: 20px;
+    }
+
+    .PERCENT{
+      padding: 10px 20px;
+      display: inline-block;
+      .AMOUNT{
+        font-size: 60px;
+      }
+      .UNIT{
+        font-size: 28px;
+      }
+
+    }
+
+    .CIRCLE{
+      float: right;
+      display: inline-block;
+
+    }
+
+  }
+
+  .STATUS{
+    font-size: 36px;
+    border: solid 0px;
+    border-bottom-width: 4px;
+  }
+
+  .VACANT{
+    .STATUS{
+      color: $vacantColor;
+      border-color: $vacantColor;
+    }
+  }
+
+  .OCCUPIED{
+    .STATUS{
+      color: $occupiedColor;
+      border-color: $occupiedColor;
+    }
+  }
+  .UNKNOWN{
+    .STATUS{
+      color: $unknownColor;
+      border-color: $unknownColor;
+    }
+  }
+
+}
+
+
+.REPORT{
+  margin: 10px 0px;
+  border: dashed 0px #cccccc;
+  border-top-width: 2px;
+
+  .LEFT-BOX{
+    display: inline-block;
+    width: 100px;
+    .PART-TITLE{
+    }
+  }
+
+}
+.DAILY-CHART{
+  display: inline-block;
+  width: 600px;
+  margin-left: 20px;
+}
+
+.BARS{
+
+  list-style: none;
+  height: 200px;
+  overflow: hidden;
+
+  .BAR{
+    display:inline;
+    float: left;
+    width: 8px;
+    margin: 0px 16px;
+
+    .VACANT-BAR{
+      background-color: $vacantColor;
+      color: $vacantColor;
+    }
+
+    .OCCUPIED-BAR{
+      background-color: $occupiedColor;
+      color: $occupiedColor;
+    }
+    .UNKNOWN-BAR{
+      background-color: $unknownColor;
+      color: $unknownColor;
+    }
+
+    .H-10{
+      height: 20px;
+    }
+    .H-20{
+      height: 40px;
+    }
+    .H-30{
+      height: 60px;
+    }
+    .H-40{
+      height: 80px;
+    }
+    .H-50{
+      height: 100px;
+    }
+    .H-60{
+      height: 120px;
+    }
+    .H-70{
+      height: 140px;
+    }
+    .H-80{
+      height: 160px;
+    }
+    .H-90{
+      height: 180px;
+    }
+    .H-100{
+      height: 200px;
+    }
+
+
+  }
+}
+.DOTS{
+  
+  list-style:none;
+  margin: 5px 0px;
+  line-height: 40px;
+  height: 40px;
+  clear:none;
+
+  .DOT{
+    float: left;
+    font-size: 9px;
+    width: 26px;
+    margin: 0px 7px;
+  }
+}
+

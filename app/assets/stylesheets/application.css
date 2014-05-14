@@ -13,28 +13,5 @@
  *= require_tree .
  *= require_self
  */
-p.STALL{
-  font-size: 40px;
-  display: inline-block;
-  text-align: center;
-  margin: 0px auto;
-  width: 300px;
-  padding: 100px 0px;
-  color: white;
-}
-
-p.VACANT{
-  background-color: #3333ff;
-}
-
-p.OCCUPIED{
-  background-color: #ff3333;
-}
-p.UNKNOWN{
-  background-color: #888888;
-}
 
 
-.STALLS_NAME, .STALLS_STATUS{
-  font-family: 'Yanone Kaffeesatz', sans-serif;
-}

@@ -19,9 +19,16 @@ module ApplicationHelper
 
   def message_for_device_status( device_status )
     {
-      Device::STATUSES[:sleep] => "現在監視をしていません",
-      Device::STATUSES[:running] => "監視中です",
-      Device::STATUSES[:error] => "エラーが発生しています"
+      Device::STATUSES[:sleep] => "Sleep.....",
+      Device::STATUSES[:running] => "Monitoring......",
+      Device::STATUSES[:error] => "No 'heart beat signal' recieved form Device!!"
+    }[device_status]
+  end
+  def class_name_for_device_status( device_status )
+    {
+      Device::STATUSES[:sleep] => "YELLOW",
+      Device::STATUSES[:running] => "GREEN",
+      Device::STATUSES[:error] => "RED"
     }[device_status]
   end
 

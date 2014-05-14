@@ -56,10 +56,10 @@ ToiletApp.def = {
 
   server: {
     //host: "192.168.100.100",
-    //host: "192.168.0.10",
-    host: "test-toilet.herokuapp.com",
-    //port: "3000"
-    port: "80"
+    host: "192.168.0.10",
+    //host: "test-toilet.herokuapp.com",
+    port: "3000"
+    //port: "80"
   },
 
   device: {
@@ -298,7 +298,7 @@ ToiletApp.Stall = ( function(){
 
 
 function heartBeatTimer(){
-  return setInterval( heartBeat, 5000 );
+  return setInterval( heartBeat, 60000 );
 }
 
 function stopMonitoring(){

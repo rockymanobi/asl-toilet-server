@@ -1,7 +1,7 @@
 
 
 function heartBeatTimer(){
-  return setInterval( heartBeat, 5000 );
+  return setInterval( heartBeat, 60000 );
 }
 
 function stopMonitoring(){

@@ -18,6 +18,7 @@ class StallsController < ApplicationController
 
     raise "no such status" unless Stall::STATUSES.has_value? params[:status]
     @stall.status = params[:status]
+    @stall.updated_at = Time.now
     @stall.save!
 
     render json: nil

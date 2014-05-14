@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AstToilet</title>
+  <title>BEmpty</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700,200' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -10,7 +11,15 @@
 </head>
 <body>
 
-<%= yield %>
+<div class="MAIN-CONTAINER">
+  <header class="MAIN-HEADER">
+  <h1 class="LOGO">BEmpty</h1>
+  </header>
+  <div class="CONTENTS"><%= yield %></div>
+  <footer class="MAIN-FOOTER">
+  <p class="LOGO">BEmpty</p>
+  </footer>
+ </div>
 
 </body>
 </html>

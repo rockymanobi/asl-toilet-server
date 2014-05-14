@@ -8,7 +8,7 @@ class Device < ActiveRecord::Base
   }
 
   def clear_all_stalls
-    self.monitoring_stalls.update_all( status: Stall::STATUSES[:unknown], device_id: nil )
+    self.monitoring_stalls.update_all( status: Stall::STATUSES[:unknown], device_id: nil, updated_at: Time.now )
   end
 
 end

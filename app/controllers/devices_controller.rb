@@ -12,7 +12,6 @@ class DevicesController < ApplicationController
   end
 
   def heart_beat
-    p 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     @device.status = Device::STATUSES[:running]
     @device.status_updated_at = Time.now 
     @device.save!

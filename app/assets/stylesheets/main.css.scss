@@ -1,0 +1,51 @@
+
+
+h1,h2,h3{ margin: 0; padding: 0; }
+
+
+ol{
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
+
+.RED{ color: red; }
+.GREEN{ color: green; }
+.yellow{ color: yellow; }
+
+
+body{
+  color: #96979f;
+  background: url(asset-path('backgrounds/3000x2250/6.jpg', image ));
+}
+
+
+.MAIN-CONTAINER{
+  margin: 50px auto;
+  width: 960px;
+  background: white;
+  border-radius: 4px;
+  padding: 10px 0px;
+}
+
+footer.MAIN-FOOTER{
+  text-align: center;
+}
+
+.LOGO{
+  font-weight: normal;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+header.MAIN-HEADER{
+
+  border: solid 0px #cccccc;
+  border-bottom-width: 1px;
+  padding: 5px 0px 15px 20px;
+}
+
+.CONTENTS{
+  background: #ebf2f6;
+}
