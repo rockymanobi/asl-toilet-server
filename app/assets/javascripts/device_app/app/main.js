@@ -78,13 +78,11 @@ ToiletApp.checkDoor = function( door){
   door.toNextState();
   var requestTarget = {
     id: door.id,
-    status_updated_at: (new Date()).getTime(),
-    status: door.status
+    status: door.state
   };
 
   if( door.hasChangedToVacantState() ) R.push( requestTarget );
   if( door.hasChangedToOccupiedState() ) R.push( requestTarget );
-  console.log( door.id +  ":" + door.state );
 
 };
 
@@ -108,7 +106,7 @@ function hoge(  stallDef ){
     console.log( stallDef.pin );
     var pin = stallDef.pin;
   
-   var sensor = new ToiletApp.DoorSensor( "d1", { pin: pin });
+    var sensor = new ToiletApp.DoorSensor( "d1", { pin: pin });
     var stall = new ToiletApp.Stall( {id: stallDef.id, doorSensor: sensor });
     ToiletApp.checkDoorTimer( stall );
 }
