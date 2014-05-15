@@ -30,6 +30,7 @@ ToiletApp.Syncer = (function(){
         //console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.on('data', function (chunk) {
           console.log('BODY: ' + chunk);
+          target.door.markSyncedState();
         });
       });
       

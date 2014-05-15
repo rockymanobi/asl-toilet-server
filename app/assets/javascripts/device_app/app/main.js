@@ -75,10 +75,16 @@ ToiletApp.checkDoorTimer = function( door ){
 
 ToiletApp.checkDoor = function( door){
 
+  if( getTime() -  door.stateUpdatedAt >= 20 && door.state != door.syncedState ){
+
+    door.toUnknown();
+  }
+
   door.toNextState();
   var requestTarget = {
     id: door.id,
-    status: door.state
+    status: door.state,
+    door: door
   };
 
   if( door.hasChangedToVacantState() ) R.push( requestTarget );
@@ -112,7 +118,6 @@ function hoge(  stallDef ){
 }
 
 var wifiConnectedCallback = function(){
-  console.log("callback");
 
   var serverDef = ToiletApp.def.server;
   var stallsDef = ToiletApp.def.room.stalls;

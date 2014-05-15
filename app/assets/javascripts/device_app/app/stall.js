@@ -9,6 +9,8 @@ ToiletApp.Stall = ( function(){
   function Stall( options ){
     var statuses = ToiletApp.Stall.STATUSES;
     this.state = statuses.unknown;
+    this.stateUpdatedAt = getTime();
+    this.syncedState = "";
     this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
@@ -29,7 +31,18 @@ ToiletApp.Stall = ( function(){
     isVacant: function(){ return this.state == Stall.STATUSES.vacant; },
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
     isOccupied: function(){ return this.state ==  Stall.STATUSES.occupied; },
+    toUnknown: function(){
+      this.state = Stall.STATUSES.unknown;
+    },
+
+    putTimeStamp: function(){
+      if(this.beforeState != this.state ){ this.stateUpdatedAt = getTime(); }
+    },
   
+    markSyncedState: function(){
+      this.syncedState = this.state;
+    }
+    ,
     _getNextState: function(){
       var statuses = ToiletApp.Stall.STATUSES;
       var nextState;
@@ -70,6 +83,7 @@ ToiletApp.Stall = ( function(){
     toNextState: function(){
       this.beforeState = this.state;
       this.state = this._getNextState();
+      this.putTimeStamp();
     },
   
     hasChangedToOccupiedState: function(){

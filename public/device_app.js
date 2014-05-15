@@ -178,6 +178,7 @@ ToiletApp.Syncer = (function(){
         //console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.on('data', function (chunk) {
           console.log('BODY: ' + chunk);
+          target.door.markSyncedState();
         });
       });
       
@@ -215,6 +216,8 @@ ToiletApp.Stall = ( function(){
   function Stall( options ){
     var statuses = ToiletApp.Stall.STATUSES;
     this.state = statuses.unknown;
+    this.stateUpdatedAt = getTime();
+    this.syncedState = "";
     this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
@@ -235,7 +238,18 @@ ToiletApp.Stall = ( function(){
     isVacant: function(){ return this.state == Stall.STATUSES.vacant; },
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
     isOccupied: function(){ return this.state ==  Stall.STATUSES.occupied; },
+    toUnknown: function(){
+      this.state = Stall.STATUSES.unknown;
+    },
+
+    putTimeStamp: function(){
+      if(this.beforeState != this.state ){ this.stateUpdatedAt = getTime(); }
+    },
   
+    markSyncedState: function(){
+      this.syncedState = this.state;
+    }
+    ,
     _getNextState: function(){
       var statuses = ToiletApp.Stall.STATUSES;
       var nextState;
@@ -276,6 +290,7 @@ ToiletApp.Stall = ( function(){
     toNextState: function(){
       this.beforeState = this.state;
       this.state = this._getNextState();
+      this.putTimeStamp();
     },
   
     hasChangedToOccupiedState: function(){
@@ -372,10 +387,16 @@ ToiletApp.checkDoorTimer = function( door ){
 
 ToiletApp.checkDoor = function( door){
 
+  if( getTime() -  door.stateUpdatedAt >= 20 && door.state != door.syncedState ){
+
+    door.toUnknown();
+  }
+
   door.toNextState();
   var requestTarget = {
     id: door.id,
-    status: door.state
+    status: door.state,
+    door: door
   };
 
   if( door.hasChangedToVacantState() ) R.push( requestTarget );
@@ -409,7 +430,6 @@ function hoge(  stallDef ){
 }
 
 var wifiConnectedCallback = function(){
-  console.log("callback");
 
   var serverDef = ToiletApp.def.server;
   var stallsDef = ToiletApp.def.room.stalls;
