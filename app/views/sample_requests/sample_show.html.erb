@@ -18,6 +18,8 @@
     <div id="circle2" class="">
     </div>
   </div>
+
+
 </div>
 
 
@@ -107,7 +109,7 @@
 
 
 <%= javascript_tag do %>
-  setInterval( window.listen_heart_beat_request ,12000);
+  window.listen_heart_beat_request();
   //setTimeout( function(){ location.reload(); } ,1000);
   new MyView({ el: "#asl1", model: new Stall( <%= Stall.find_by( name: 'asl1').to_json.html_safe %> ) }).render();
   new MyView({ el: "#asl2", model: new Stall( <%= Stall.find_by( name: 'asl2').to_json.html_safe %> ) }).render();

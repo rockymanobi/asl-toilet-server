@@ -60,7 +60,17 @@ class TestLog < ActiveRecord::Base
 
     def report( options = {} )
 
+default_result = <<"EOS"
+status,amount
+vacant,0
+occupied,0
+unknown,100
+EOS
+
       a = TestLog.create_repo_data( options )
+
+      return default_result unless a.intervals.present?
+
       vacant = a.intervals.select{|i| i.status == "vacant" }.map(&:interval).inject(0){ |sum, i| sum + i } 
       unknown = a.intervals.select{|i| i.status == "unknown" }.map(&:interval).inject(0){ |sum, i| sum + i } 
       occupied = a.intervals.select{|i| i.status == "occupied" }.map(&:interval).inject(0){ |sum, i| sum + i } 
@@ -77,6 +87,8 @@ EOS
 
     def percent( options = {} )
       a = TestLog.create_repo_data( options )
+      return 0 unless a.intervals.present?
+
       vacant = a.intervals.select{|i| i.status == "vacant" }.map(&:interval).inject(0){ |sum, i| sum + i } 
       unknown = a.intervals.select{|i| i.status == "unknown" }.map(&:interval).inject(0){ |sum, i| sum + i } 
       occupied = a.intervals.select{|i| i.status == "occupied" }.map(&:interval).inject(0){ |sum, i| sum + i } 
