@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resource :data, only: [] do
     collection do
       get :circle
+      get :percent
     end
   end
 

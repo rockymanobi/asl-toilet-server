@@ -7,6 +7,13 @@ MyView = Backbone.Marionette.ItemView.extend({
     this.statusUpdatedAt = moment( new Date( this.model.get('status_updated_at')) );
 
     this.update();
+
+    var _this = this;
+    $.get( '/data/percent?stall_name=' + this.model.get("name") ).done(function(data){
+      _this.$('.amount').html( data );
+    });
+
+
   },
 
   template : 'sample_requests/stall_template',

@@ -26,7 +26,6 @@ Backbone.Marionette.Renderer.render = function(template, data){
 }
 
 
-
 window.testCircle = function( target, dataUrl ){
 
 var width = 100,
