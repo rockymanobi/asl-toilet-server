@@ -22,7 +22,7 @@ class StallsController < ApplicationController
     @stall.status_updated_at = status_updated_at || Time.now
     @stall.save!
 
-    render json: nil
+    render json: "stall #{@stall.name} is updated to #{@stall.status}"
   end
 
   private

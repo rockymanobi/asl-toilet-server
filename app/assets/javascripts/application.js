@@ -27,7 +27,7 @@ Backbone.Marionette.Renderer.render = function(template, data){
 
 
 
-window.testCircle = function( target ){
+window.testCircle = function( target, dataUrl ){
 
 var width = 100,
     height = 100,
@@ -50,7 +50,7 @@ var svg = d3.select(target).append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-d3.csv("/data/circle", function(error, data) {
+d3.csv( dataUrl, function(error, data) {
 
   data.forEach(function(d) {
     d.amount = +d.amount;

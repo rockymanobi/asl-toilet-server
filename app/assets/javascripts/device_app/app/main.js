@@ -76,9 +76,14 @@ ToiletApp.checkDoorTimer = function( door ){
 ToiletApp.checkDoor = function( door){
 
   door.toNextState();
+  var requestTarget = {
+    id: door.id,
+    status_updated_at: (new Date()).getTime(),
+    status: door.status
+  };
 
-  if( door.hasChangedToVacantState() ) R.push( door );
-  if( door.hasChangedToOccupiedState() ) R.push( door );
+  if( door.hasChangedToVacantState() ) R.push( requestTarget );
+  if( door.hasChangedToOccupiedState() ) R.push( requestTarget );
   console.log( door.id +  ":" + door.state );
 
 };

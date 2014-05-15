@@ -15,7 +15,7 @@ class DevicesController < ApplicationController
     @device.status = Device::STATUSES[:running]
     @device.status_updated_at = Time.now 
     @device.save!
-    render json: @device
+    render json: 'HEART BEAT DETECTED!'
   end
 
   def stop_monitoring

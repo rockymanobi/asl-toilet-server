@@ -1,17 +1,8 @@
 class DataController < ApplicationController
   def circle
 
-rtn = <<"EOS"
-status,amount
-vacant,2704659
-occupied,4499890
-unknown,2159981
-EOS
-
-
-  logs = TestLog.where( stall_name: "asl1" )
-
-
-    render text: rtn
+    param_till = Time.at( params[:till].to_i / 1000 ) if params[:till].present?
+    till = param_till || Time.parse( Time.now.strftime('%y%m%d') + " 20:00:00" )
+    render text: TestLog.report( { stall_name: params[:stall_name], till: till  } )
   end
 end

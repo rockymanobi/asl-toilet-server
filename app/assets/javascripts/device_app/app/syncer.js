@@ -8,6 +8,7 @@ ToiletApp.Syncer = (function(){
       var serverDef = ToiletApp.def.server;
       var payload = {
         _method: 'PUT',
+        status_updated_at: target.status_updated_at,
         status: target.state
       };
       var urlpayload = "_method=" + payload._method +"&status=" + payload.status;

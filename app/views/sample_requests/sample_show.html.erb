@@ -114,8 +114,8 @@
 <% end %>
 
 <script>
-  window.testCircle('#circle-1');
-  window.testCircle('#circle-2');
+  window.testCircle('#circle-1', '/data/circle?stall_name=asl1');
+  window.testCircle('#circle-2', '/data/circle?stall_name=asl2&till=' + String( new Date().getTime() ));
 
 </script>
 
