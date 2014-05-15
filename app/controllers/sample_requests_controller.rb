@@ -17,7 +17,11 @@ class SampleRequestsController < ApplicationController
     
     ng_devices = Device.where(status: Device::STATUSES[:running]).where( devices[:status_updated_at].lt( now ))
     p ng_devices.all
-    Stall.where( device: ng_devices).update_all( status: Stall::STATUSES[:unknown], updated_at: Time.now )
+    Stall.where( device: ng_devices).each do |s|
+      s.status = Stall::STATUSES[:unknown]
+      s.status_updated_at =  Time.now
+      s.save!
+    end
     ng_devices.update_all( status: Device::STATUSES[:error])
 
     render json: nil

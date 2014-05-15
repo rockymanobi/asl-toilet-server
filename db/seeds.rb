@@ -7,10 +7,10 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
 
-device = Device.new( { name: 'asl', status: Device::STATUSES[:sleep]  } ).save!
+device = Device.new( { name: 'asl', status: Device::STATUSES[:sleep], status_updated_at: Time.now  } ).save!
 
-asl_stall_1 = Stall.new( { name: 'asl1', display_name: 'asl1', status: Stall::STATUSES[:unknown] } ).save!
-asl_stall_2 = Stall.new( { name: 'asl2', display_name: 'asl2', status: Stall::STATUSES[:unknown] } ).save!
+asl_stall_1 = Stall.new( { name: 'asl1', display_name: 'asl1', status: Stall::STATUSES[:unknown] , status_updated_at: Time.now} ).save!
+asl_stall_2 = Stall.new( { name: 'asl2', display_name: 'asl2', status: Stall::STATUSES[:unknown] , status_updated_at: Time.now} ).save!
 
 
 

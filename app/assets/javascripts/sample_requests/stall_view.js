@@ -4,9 +4,7 @@
 MyView = Backbone.Marionette.ItemView.extend({
 
   initialize: function(){
-    this.statusUpdatedAt = moment( new Date( this.model.get('updated_at')) );
-    console.log(this.model.get('updated_at'));
-    console.log( new Date( this.model.get('updated_at')));
+    this.statusUpdatedAt = moment( new Date( this.model.get('status_updated_at')) );
 
     this.update();
   },

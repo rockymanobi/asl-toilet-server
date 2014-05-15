@@ -8,7 +8,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :data do
+  resources :test_logs, only: [:index] do
+  end
+
+  resource :data, only: [] do
     collection do
       get :circle
     end
