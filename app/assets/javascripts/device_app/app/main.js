@@ -1,9 +1,3 @@
-
-
-function heartBeatTimer(){
-  return setInterval( heartBeat, 60000 );
-}
-
 function stopMonitoring(){
   var serverDef = ToiletApp.def.server;
   var payload = {
@@ -33,39 +27,6 @@ function stopMonitoring(){
   req.end();
 };
 
-
-
-function heartBeat(){
-  var serverDef = ToiletApp.def.server;
-  var payload = {
-    method: 'PUT',
-    status: 'running'
-  };
-  var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
-
-  var options = {
-    host: serverDef.host,
-    port: serverDef.port,
-    path: '/devices/' + ToiletApp.def.device.id + '/heart_beat',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': urlpayload.length
-    },
-    method: 'POST'
-  };
-
-
-  var req = require("http").request( options, function(res) {
-    res.on('data', function (chunk) {
-      console.log('BODY: ' + chunk);
-    });
-  });
-
-  req.write( urlpayload );
-  req.end();
-};
-
-
 ToiletApp.checkDoorTimer = function( door ){
   ToiletApp.checkDoor( door);
   setTimeout( function(){
@@ -75,9 +36,9 @@ ToiletApp.checkDoorTimer = function( door ){
 
 ToiletApp.checkDoor = function( door){
 
-  if( getTime() -  door.stateUpdatedAt >= 20 && door.state != door.syncedState ){
-
+  if( door.wifiConnectedTime != wifi.connectedTime ){
     door.toUnknown();
+    door.wifiConnectedTime = wifi.connectedTime;
   }
 
   door.toNextState();
@@ -156,9 +117,15 @@ var wifiConnectedCallback = function(){
 
 var R = void(0);
 var wifi = void(0);
+var heartBeat = void(0);
 function onInit(){
+
+  clearInterval();
+  clearTimeout();
+
   LEDs.show( statuses.started );
   var syncer = new ToiletApp.Syncer();
+  heartBeat  = new ToiletApp.HeartBeat();
   wifi = new ToiletApp.Wifi( wifiConnectedCallback );
   R = new ToiletApp.SyncRequestProcessor( {syncer: syncer} );
   
@@ -171,18 +138,14 @@ function onInit(){
     hoge( stallDef );
   }
 
-
-
-  var heartBeatInterval = void(0);
   LED1.write(false);
-  setTimeout( function(){ heartBeatInterval = heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
-
+  setTimeout( function(){ heartBeat.start(); R.start(); LED1.write(true);}, 5000 );
 
   var stopped = false;
 
   function stopAll(){
     stopMonitoring();
-    clearInterval(heartBeatInterval);
+    heartBeat.stop();
     R.stop();
     LEDs.show( statuses.stoped );
   }
@@ -194,8 +157,13 @@ function onInit(){
     }
   } ,1000);
 
+  setInterval( function(){
+    if( !C9.read()  && wifi.isReady ){ 
+      console.log("C9 PUSHED!!");
+      wifi.reconnect();
+    }
+  } ,1000);
 }
-
 
 onInit();
 

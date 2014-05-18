@@ -14,6 +14,7 @@ ToiletApp.Stall = ( function(){
     this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
+    this.wifiConnectedTime = 0;
   }
 
   Stall.STATUSES = {
@@ -32,6 +33,7 @@ ToiletApp.Stall = ( function(){
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
     isOccupied: function(){ return this.state ==  Stall.STATUSES.occupied; },
     toUnknown: function(){
+      console.log("to unknown");
       this.state = Stall.STATUSES.unknown;
     },
 

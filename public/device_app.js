@@ -42,24 +42,24 @@ LedStatusVisualizer = (function(){
 ToiletApp = {};
 ToiletApp.def = {
 
-  /*
   wifi: {
     id: "HWD14_904E2B402303",
     password: "8a6g1tijbi2t8ah"
   },
 
-  */
+  /*
   wifi: {
     id: "BCW710J-83EEA-G",
     password: "d5433a48fe448"
   },
+  */
 
   server: {
     //host: "192.168.100.100",
-    host: "192.168.0.10",
-    //host: "test-toilet.herokuapp.com",
-    port: "3000"
-    //port: "80"
+    //host: "192.168.0.10",
+    host: "test-toilet.herokuapp.com",
+    //port: "3000"
+    port: "80"
   },
 
   device: {
@@ -76,20 +76,107 @@ ToiletApp.def = {
 }
 
 ;
+ToiletApp = ToiletApp || {};
+ToiletApp.HeartBeat = (function(){
+  function HeartBeat(){
+    this.timer = void(0);
+    this.successCounter = 0;
+    this.requestCounter = 0;
+    this.interval = 45000;
+  }
+
+  HeartBeat.prototype = {
+    start: function(){
+      this.heartBeatTimer();
+    },
+    stop: function(){
+      console.log("heartbeat stopped");
+      clearTimeout( this.timer );
+    },
+    heartBeatTimer: function(){
+      var _this = this;
+      this.heartBeat();
+      this.timer = setTimeout( function(){
+        _this.heartBeatTimer();
+      }, this.interval);
+    },
+
+    heartBeat: function(){
+
+      var _this = this;
+
+
+
+      if( this.requestCounter - this.successCounter >= 2 ){
+        this.requestCounter = 0;
+        this.successCounter = 0;
+        wifi.reconnect();
+        return;
+      }
+
+      this.requestCounter += 1;
+      if( !wifi.isReady ){ console.log('wifi not ready for heart beat');return; }
+
+      var serverDef = ToiletApp.def.server;
+      var payload = {
+        method: 'PUT',
+        status: 'running'
+      };
+      var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
+
+      var options = {
+        host: serverDef.host,
+        port: serverDef.port,
+        path: '/devices/' + ToiletApp.def.device.id + '/heart_beat',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': urlpayload.length
+        },
+        method: 'POST'
+      };
+
+      var req = require("http").request( options, function(res) {
+        res.on('data', function (chunk) {
+          _this.successCounter += 1;
+          console.log('BODY: ' + chunk);
+        });
+      });
+
+      req.write( urlpayload );
+      req.end();
+
+    }
+  };
+
+  return HeartBeat;
+
+})(); 
+
+
+
 ToiletApp.Wifi = (function(){
   function Wifi( callback ){
     var def = ToiletApp.def;
     this.wlan = require("CC3000").connect();
     this.isReady = false;
+    this.connectedTime = 0;
     var _this = this;
     var h = this.wlan.connect( def.wifi.id, def.wifi.password, function (s) { 
       if (s=="dhcp") {
+        _this.connectedTime = getTime();
         console.log('wifi connected!');
         _this.isReady = true;
         callback();
       }
     });
   }
+
+  Wifi.prototype = {
+    reconnect: function(){
+      this.isReady = false;
+      this.wlan.reconnect();
+    }
+  };
 
   return Wifi;
 
@@ -221,6 +308,7 @@ ToiletApp.Stall = ( function(){
     this.beforeState = statuses.unknown;
     this.id = options.id;
     this.doorSensor = options.doorSensor;
+    this.wifiConnectedTime = 0;
   }
 
   Stall.STATUSES = {
@@ -239,6 +327,7 @@ ToiletApp.Stall = ( function(){
     isMaybeOccupied: function(){ return this.state == Stall.STATUSES.maybe_occupied; },
     isOccupied: function(){ return this.state ==  Stall.STATUSES.occupied; },
     toUnknown: function(){
+      console.log("to unknown");
       this.state = Stall.STATUSES.unknown;
     },
 
@@ -310,12 +399,6 @@ ToiletApp.Stall = ( function(){
 })();
 
 
-
-
-function heartBeatTimer(){
-  return setInterval( heartBeat, 60000 );
-}
-
 function stopMonitoring(){
   var serverDef = ToiletApp.def.server;
   var payload = {
@@ -345,39 +428,6 @@ function stopMonitoring(){
   req.end();
 };
 
-
-
-function heartBeat(){
-  var serverDef = ToiletApp.def.server;
-  var payload = {
-    method: 'PUT',
-    status: 'running'
-  };
-  var urlpayload = "_method=" + payload.method +"&status=" + payload.status;
-
-  var options = {
-    host: serverDef.host,
-    port: serverDef.port,
-    path: '/devices/' + ToiletApp.def.device.id + '/heart_beat',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': urlpayload.length
-    },
-    method: 'POST'
-  };
-
-
-  var req = require("http").request( options, function(res) {
-    res.on('data', function (chunk) {
-      console.log('BODY: ' + chunk);
-    });
-  });
-
-  req.write( urlpayload );
-  req.end();
-};
-
-
 ToiletApp.checkDoorTimer = function( door ){
   ToiletApp.checkDoor( door);
   setTimeout( function(){
@@ -387,9 +437,9 @@ ToiletApp.checkDoorTimer = function( door ){
 
 ToiletApp.checkDoor = function( door){
 
-  if( getTime() -  door.stateUpdatedAt >= 20 && door.state != door.syncedState ){
-
+  if( door.wifiConnectedTime != wifi.connectedTime ){
     door.toUnknown();
+    door.wifiConnectedTime = wifi.connectedTime;
   }
 
   door.toNextState();
@@ -468,9 +518,15 @@ var wifiConnectedCallback = function(){
 
 var R = void(0);
 var wifi = void(0);
+var heartBeat = void(0);
 function onInit(){
+
+  clearInterval();
+  clearTimeout();
+
   LEDs.show( statuses.started );
   var syncer = new ToiletApp.Syncer();
+  heartBeat  = new ToiletApp.HeartBeat();
   wifi = new ToiletApp.Wifi( wifiConnectedCallback );
   R = new ToiletApp.SyncRequestProcessor( {syncer: syncer} );
   
@@ -483,18 +539,14 @@ function onInit(){
     hoge( stallDef );
   }
 
-
-
-  var heartBeatInterval = void(0);
   LED1.write(false);
-  setTimeout( function(){ heartBeatInterval = heartBeatTimer(); R.start(); LED1.write(true);}, 5000 );
-
+  setTimeout( function(){ heartBeat.start(); R.start(); LED1.write(true);}, 5000 );
 
   var stopped = false;
 
   function stopAll(){
     stopMonitoring();
-    clearInterval(heartBeatInterval);
+    heartBeat.stop();
     R.stop();
     LEDs.show( statuses.stoped );
   }
@@ -506,8 +558,13 @@ function onInit(){
     }
   } ,1000);
 
+  setInterval( function(){
+    if( !C9.read()  && wifi.isReady ){ 
+      console.log("C9 PUSHED!!");
+      wifi.reconnect();
+    }
+  } ,1000);
 }
-
 
 onInit();
 
@@ -522,3 +579,6 @@ onInit();
 
 
 
+//
+
+;
