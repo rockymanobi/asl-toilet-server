@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :sample_requests, only: [:index, :show, :create] do
     member do
       get :sample_show
+      get :admin_console
     end
     collection do
       post :listen_heart_beat

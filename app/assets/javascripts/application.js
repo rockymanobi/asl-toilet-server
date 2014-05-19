@@ -18,6 +18,8 @@
 //
 //= require backbone.marionette/marionette_main
 //
+//= require sample_requests/stall_view
+//= require sample_requests/admin_console_stall_view
 //= require sample_requests/listen_heart_beat_request
 
 Backbone.Marionette.Renderer.render = function(template, data){

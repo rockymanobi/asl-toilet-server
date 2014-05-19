@@ -1,0 +1,122 @@
+
+<div class="MONITOR">
+  <div class="DEVICE-STATUS">
+    <div class="<%= class_name_for_device_status(@device.status)%>"><%= message_for_device_status( @device.status ) %>
+    <% if @device.status_updated_at.present? %>
+      Last Heart Beat Signal : <%=  @device.status_updated_at.strftime("%m/%d %H:%M:%S") %>
+    <% end %>
+    </div>
+  </div>
+  <div class="STALL-MONITOR">
+    <div id="asl1">
+    </div>
+  </div>
+
+  <div class="STALL-MONITOR">
+    <div id="asl2">
+    </div>
+    <div id="circle2" class="">
+    </div>
+  </div>
+
+</div>
+
+
+<div class="REPORT">
+
+  <div class="DAILY-CHART">
+    <ol class ="DOTS">
+      <li class="DOT">8:00</li>
+      <li class="DOT">9:00</li>
+      <li class="DOT">10:00</li>
+      <li class="DOT">11:00</li>
+      <li class="DOT">12:00</li>
+      <li class="DOT">13:00</li>
+      <li class="DOT">14:00</li>
+      <li class="DOT">15:00</li>
+      <li class="DOT">16:00</li>
+      <li class="DOT">17:00</li>
+      <li class="DOT">18:00</li>
+      <li class="DOT">19:00</li>
+      <li class="DOT">20:00</li>
+    </ol>
+    <ol class="BARS">
+      <li class="BAR">
+        <div class="UNKNOWN-BAR H-50">_</div>
+        <div class="VACANT-BAR H-50">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-20">_</div>
+        <div class="VACANT-BAR H-80">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-40">_</div>
+        <div class="VACANT-BAR H-60">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-30">_</div>
+        <div class="VACANT-BAR H-70">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-40">_</div>
+        <div class="VACANT-BAR H-60">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-80">_</div>
+        <div class="VACANT-BAR H-20">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-70">_</div>
+        <div class="VACANT-BAR H-30">_</div>
+      </li>
+      <li class="BAR">
+        <div class="UNKNOWN-BAR H-10">_</div>
+        <div class="OCCUPIED-BAR H-40">_</div>
+        <div class="VACANT-BAR H-50">_</div>
+      </li>
+      <li class="BAR">
+        <div class="UNKNOWN-BAR H-20">_</div>
+        <div class="OCCUPIED-BAR H-30">_</div>
+        <div class="VACANT-BAR H-50">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-20">_</div>
+        <div class="VACANT-BAR H-80">_</div>
+      </li>
+      <li class="BAR">
+        <div class="OCCUPIED-BAR H-30">_</div>
+        <div class="VACANT-BAR H-70">_</div>
+      </li>
+      <li class="BAR">
+        <div class="UNKNOWN-BAR H-100">_</div>
+      </li>
+      <li class="BAR">
+        <div class="UNKNOWN-BAR H-100">_</div>
+      </li>
+    </ol>
+  </div>
+  <ul>
+    <li>TODO</li>
+    <li>開いたら教えてボタン。まずはメールで教えてくれる機構を作る</li>
+    <li>レポートもチャートも嘘っぱちなのでちゃんと作る</li>
+    <li>パーセントも嘘っぱちなのでちゃんと作る</li>
+    <li>Dashboard的なデザインにしたかったけど飽きてきた</li>
+    <li>リアルタイムアップデートは面倒だから後でやる</li>
+    <li>Vacant = 開いてます / occupied 閉まってます</li>
+  </ul>
+</div>
+
+
+<%= javascript_tag do %>
+  window.listen_heart_beat_request();
+  //setTimeout( function(){ location.reload(); } ,1000);
+  new AdminConsoleStoleView({ el: "#asl1", model: new Stall( <%= Stall.find_by( name: 'asl1').to_json.html_safe %> ) }).render();
+  new AdminConsoleStoleView({ el: "#asl2", model: new Stall( <%= Stall.find_by( name: 'asl2').to_json.html_safe %> ) }).render();
+<% end %>
+
+<script>
+  window.testCircle('#circle-1', '/data/circle?stall_name=asl1');
+  window.testCircle('#circle-2', '/data/circle?stall_name=asl2');
+
+</script>
+
