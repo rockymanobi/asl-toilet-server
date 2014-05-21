@@ -43,11 +43,15 @@ ToiletApp = {};
 ToiletApp.def = {
 
   wifi: {
-    id: "HWD14_904E2B402303",
-    password: "8a6g1tijbi2t8ah"
+    id: "102Z_D6D2BD",
+    password: "1266998a"
   },
 
   /*
+  wifi: {
+    id: "HWD14_904E2B402303",
+    password: "8a6g1tijbi2t8ah"
+  },
   wifi: {
     id: "BCW710J-83EEA-G",
     password: "d5433a48fe448"
