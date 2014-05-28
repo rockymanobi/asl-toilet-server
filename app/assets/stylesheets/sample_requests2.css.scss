@@ -16,21 +16,23 @@ $unknownColor: #cccccc;
       z-index: 2;
 
       -webkit-transform: perspective(500) rotateY(0deg);
-      -moz-transform: perspective(500) rotateY(0deg);
+      -moz-transform:  rotateY(0deg);
       transform: perspective(500) rotateY(0deg);
       -webkit-transform-origin: left 0%;
       -moz-transform-origin: left 0%;
       transform-origin: left 0%;
+      -moz-perspective: 500;
 
     }
 
     .OUTSIDE.OPEN{
       -webkit-transform: perspective(500) rotateY(90deg);
-      -moz-transform: perspective(500) rotateY(90deg);
+      -moz-transform:  rotateY(90deg);
       transform: perspective(500) rotateY(90deg);
       -webkit-transform-origin: left 50%;
       -moz-transform-origin: left 50%;
       transform-origin: left 50%;
+      -moz-perspective: 500;
     }
 
     .INSIDE{
