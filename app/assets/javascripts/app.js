@@ -41,6 +41,9 @@ BEmpty = (function(Backbone, Marionette){
     $('#NOTICE p').remove();
     $('#NOTICE').append( "<p class=" + colorClass +  ">" + text + "</p>");
   }
+  App.clearNotice = function( ){
+    $('#NOTICE p').remove();
+  }
 
   return App;
 })(Backbone, Marionette);
@@ -198,6 +201,7 @@ BEmpty.module("SubApp", {
       }
       ,
       onRefreshClick: function(){
+        App.clearNotice();
         _.each( this.models, function( val ){
           val.fetch();
         });

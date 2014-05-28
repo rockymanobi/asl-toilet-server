@@ -1,0 +1,8 @@
+@AssetsPaths =
+  <% Dir.glob(Rails.root.join("app/assets/images/**/*.*")).each do |path| %>
+    <% fname = path.gsub(Rails.root.join("app/assets/images/").to_s, "") %>
+    <%= "  '#{fname}': '#{image_path fname}',\n" %>
+  <% end %>
+
+
+
