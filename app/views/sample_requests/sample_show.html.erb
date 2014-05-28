@@ -1,28 +1,13 @@
 
-<div class="MONITOR">
-  <div class="DEVICE-STATUS">
-    <div class="<%= class_name_for_device_status(@device.status)%>"><%= message_for_device_status( @device.status ) %>
-    <% if @device.status_updated_at.present? %>
-      Last Heart Beat Signal : <%=  @device.status_updated_at.strftime("%m/%d %H:%M:%S") %>
-    <% end %>
-    </div>
-  </div>
-  <div class="STALL-MONITOR">
-    <div id="asl1">
-    </div>
-  </div>
-
-  <div class="STALL-MONITOR">
-    <div id="asl2">
-    </div>
-  </div>
-
-</div>
-
-
+<div id="CUSTOMER-MAIN"></div>
 
 <%= javascript_tag do %>
-  new MyView({ el: "#asl1", model: new Stall( <%= Stall.find_by( name: 'asl1').to_json.html_safe %> ) }).render();
-  new MyView({ el: "#asl2", model: new Stall( <%= Stall.find_by( name: 'asl2').to_json.html_safe %> ) }).render();
+  $(document).ready( function(){
+    BEmpty.start({
+      data: {
+        bootstrapedAsl1: <%= Stall.find_by( name: 'asl1').to_json.html_safe %>,
+        bootstrapedAsl2: <%= Stall.find_by( name: 'asl2').to_json.html_safe %>
+      }
+    });
+  });
 <% end %>
-

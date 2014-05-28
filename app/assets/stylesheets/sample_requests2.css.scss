@@ -1,0 +1,57 @@
+$occupiedColor: #eb724d;
+$vacantColor: #65aae5;
+$unknownColor: #cccccc;
+
+.STALL-UNIT{
+  display: inline-block;
+  height: 400px;
+  width: 300px;
+
+  .DOOR{
+    position: relative;
+
+    .OUTSIDE{
+      transition: all 0.5s;
+      position: absolute;
+      z-index: 2;
+
+      -webkit-transform: perspective(500) rotateY(0deg);
+      -moz-transform: perspective(500) rotateY(0deg);
+      transform: perspective(500) rotateY(0deg);
+      -webkit-transform-origin: left 0%;
+      -moz-transform-origin: left 0%;
+      transform-origin: left 0%;
+
+    }
+
+    .OUTSIDE.OPEN{
+      -webkit-transform: perspective(500) rotateY(90deg);
+      -moz-transform: perspective(500) rotateY(90deg);
+      transform: perspective(500) rotateY(90deg);
+      -webkit-transform-origin: left 50%;
+      -moz-transform-origin: left 50%;
+      transform-origin: left 50%;
+    }
+
+    .INSIDE{
+      position: absolute;
+      z-index: 1;
+    }
+    .UNKNOWN.OUTSIDE{
+      z-index: 3;
+    }
+
+  }
+
+  .DOOR.vacant{
+    .OCCUPIED , .UNKNOWN{ display: none; }
+  }
+  .DOOR.occupied{
+    .VACANT, .UNKNOWN{ display: none; }
+  }
+  .DOOR.unknown{
+    .VACANT, .OCCUPIED{ display: none; }
+  }
+
+}
+

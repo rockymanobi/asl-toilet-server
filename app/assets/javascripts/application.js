@@ -17,15 +17,19 @@
 //= require d3/d3.min
 //
 //= require backbone.marionette/marionette_main
+//= require app
 //
-//= require sample_requests/stall_view
-//= require sample_requests/admin_console_stall_view
-//= require sample_requests/listen_heart_beat_request
-
+//
+//
 Backbone.Marionette.Renderer.render = function(template, data){
   if (!JST[template]) throw "Template '" + template + "' not found!";
   return JST[template](data);
 }
+
+
+
+
+
 
 
 window.testCircle = function( target, dataUrl ){

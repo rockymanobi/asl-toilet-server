@@ -1,0 +1,99 @@
+
+
+.hide{ display: none; } 
+
+h1,h2,h3{ margin: 0; padding: 0; }
+
+
+ol{
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
+
+.RED{ color: red; }
+.GREEN{ color: green; }
+.yellow{ color: yellow; }
+
+
+body{
+  color: #96979f;
+  background: url(asset-path('bg.png', image ));
+  background-attachment:fixed; 
+}
+
+
+.MAIN-CONTAINER{
+  margin: 50px auto;
+  width: 960px;
+  border-radius: 4px;
+  padding: 10px 0px;
+  border: solid 1px #cccccc;
+}
+
+footer.MAIN-FOOTER{
+  text-align: center;
+  border: solid 0px #cccccc;
+  border-top-width: 1px;
+}
+
+.LOGO{
+  font-weight: normal;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+header.MAIN-HEADER{
+
+  border: solid 0px #cccccc;
+  border-bottom-width: 1px;
+  padding: 5px 0px 15px 20px;
+}
+
+.CONTENTS{
+  padding: 10px 20px;
+  border: solid 0px orange;
+  border-left-width: 5px;
+}
+
+#NOTICE{
+  p{
+    padding: 10px;
+    border: solid 2px;
+  }
+  p.green{
+    border-color: lightGreen;
+    color: Green;
+  }
+  p.blue{
+    border-color: lightBlue;
+    color: Blue;
+  }
+}
+
+
+button{
+  font-size: 18px;
+  border-radius: 8px;
+  border: solid 2px orange;
+  background-color: white;
+  width: 300px;
+  height: 45px;
+  margin: 5px 0px;
+}
+
+button.TELL-ME{
+  border-color: skyblue;
+}
+
+
+
+.click-interactive{
+  transition: opacity 0.2s;
+  opacity: 1;
+}
+.click-interactive.on{
+  opacity: 0.2;
+}
+
