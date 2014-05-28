@@ -1,4 +1,11 @@
 
+<div class="DEVICE-STATUS">
+  <div class="<%= class_name_for_device_status(@device.status)%>"><%= message_for_device_status( @device.status ) %>
+  <% if @device.status_updated_at.present? %>
+    Last Heart Beat Signal : <%=  @device.status_updated_at.strftime("%m/%d %H:%M:%S") %>
+  <% end %>
+  </div>
+</div>
 <div id="CUSTOMER-MAIN"></div>
 
 <%= javascript_tag do %>
