@@ -10,5 +10,26 @@
         bootstrapedDevice: <%= @device.to_json.html_safe %>,
       }
     });
+
+    setTimeout(function(){
+      var key = "introIsShown";
+      var expectedValue = "true";
+      var introIsShown = function(){
+        if( !localStorage ){ return false; }
+        return localStorage.getItem( key ) === expectedValue;
+      };
+
+      var setIntroShown = function(){
+        if( !localStorage ){ return; }
+        localStorage.setItem( key, expectedValue );
+      };
+
+      if( !introIsShown() ){
+        introJs().start();
+        setIntroShown();
+      }
+
+    }, 1000);
+
   });
 <% end %>

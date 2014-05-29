@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require notifit/notifit_style
+ *= require introjs/introjs.min
  *
  *= require bempty
  *= require sample_requests2

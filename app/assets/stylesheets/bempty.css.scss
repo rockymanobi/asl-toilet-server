@@ -50,7 +50,28 @@ header.MAIN-HEADER{
   border: solid 0px #cccccc;
   border-bottom-width: 1px;
   padding: 5px 0px 15px 20px;
+
+  .MAIN-NAV{
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+
+    .ITEM{
+      text-decoration: none;
+      color: white;
+      background-color: orange;
+      border-radius: 15px;
+      display: inline-block;
+      padding: 3px 15px;
+      margin: 0px 10px;
+    }
+
+  }
+
 }
+
+
+
 
 .CONTENTS{
   padding: 10px 20px;

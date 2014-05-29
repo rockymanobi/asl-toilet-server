@@ -16,6 +16,7 @@
 //= require moment/moment
 //= require d3/d3.min
 //= require notifit/notifit
+//= require introjs/intro.min
 //
 //= require image_list
 //= require backbone.marionette/marionette_main
