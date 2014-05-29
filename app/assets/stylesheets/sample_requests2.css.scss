@@ -35,6 +35,16 @@ $unknownColor: #cccccc;
       -moz-perspective: 500;
     }
 
+    .OUTSIDE.HALF{
+      -webkit-transform: perspective(500) rotateY(60deg);
+      -moz-transform:  rotateY(60deg);
+      transform: perspective(500) rotateY(60deg);
+      -webkit-transform-origin: left 50%;
+      -moz-transform-origin: left 50%;
+      transform-origin: left 50%;
+      -moz-perspective: 500;
+    }
+
     .INSIDE{
       position: absolute;
       z-index: 1;

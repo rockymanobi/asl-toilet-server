@@ -173,6 +173,7 @@ BEmpty.module("SubApp", {
         "click .door-toggle": "onDoorToggleClick"
       },
       onDoorToggleClick: function(){
+        this.$('.HALF').removeClass("HALF");
         this.$('.OUTSIDE').toggleClass("OPEN");
       },
       onSync: function(){
