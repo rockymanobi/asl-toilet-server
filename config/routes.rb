@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: "home#index"
   resources :sample_requests, only: [:index, :show, :create] do
     member do
       get :sample_show
@@ -19,7 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :devices do
+  resources :devices, only: [:show] do
     member do
       put :heart_beat
       put :stop_monitoring

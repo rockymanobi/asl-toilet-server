@@ -1,6 +1,7 @@
 
 //=require bempty/stall_template
 //=require bempty/tell_me_template
+//=require bempty/device_template
 //=require bempty/main_layout
 BEmpty = (function(Backbone, Marionette){
 
@@ -23,6 +24,7 @@ BEmpty = (function(Backbone, Marionette){
     App.data = App.data || {};
     App.data.bootstrapedAsl1 = options.data.bootstrapedAsl1
     App.data.bootstrapedAsl2 = options.data.bootstrapedAsl2
+    App.data.bootstrapedDevice = options.data.bootstrapedDevice
   });
 
   App.startSubApp = function(appName, args){
@@ -101,7 +103,6 @@ BEmpty.module("SubApp", {
       },
 
       notify:  function(){ 
-        console.log("noifyKicked");
         var _this = this;
 
         if (!("Notification" in window)) {
@@ -113,7 +114,6 @@ BEmpty.module("SubApp", {
 
           window.Notification.requestPermission(function (permission) {
 
-            console.log(123);
             // Whatever the user answers, we make sure we store the information
             if(!('permission' in window.Notification)) {
               window.Notification.permission = permission;
@@ -137,18 +137,28 @@ BEmpty.module("SubApp", {
         App.vent.trigger("timerStartKicked");
       },
       timerStart: function(){
-        App.showNotice("空いたら教えるよ！！ でも、ページをリロードしたら教えて上げないよ", "green");
-        console.log("timerStart");
+        notif({
+          type: "info",
+          msg: "空いたら教えるよ！！ でも、ページをリロードしたら教えて上げないよ",
+          width: "all",
+          position: "center",
+          autohide: false
+        });
         var _this = this;
         var ask = function(){
           $.when( _this.asl1Model.fetch(), _this.asl2Model.fetch() )
           .then( function(){
-            console.log("asking");
             if( _this.asl1Model.isVacant() || _this.asl2Model.isVacant() ){
               _this.waiting = false;
               notifyMe();
               _this.timerStop();
-              App.showNotice( moment().format("h時 m分") + "&nbsp;に空いたよ！！もう閉まったかもしれないけど...", "blue");
+              notif({
+                type: "success",
+                msg: moment().format("h時 m分") + "&nbsp;に空いたよ！！もう閉まったかもしれないけど...",
+                width: "all",
+                position: "center",
+                autohide: false
+              });
             }else{
               _this.waiting = true;
               _this.timer = setTimeout( ask , 5000)
@@ -164,10 +174,27 @@ BEmpty.module("SubApp", {
       }
     });
 
+    var DeviceView = Marionette.ItemView.extend({
+      template: "bempty/device_template",
+      templateHelpers: {
+        statusText: function(){
+          var text = {
+            "sleep" : "今は監視をしていません。",
+            "error" : "監視デバイスからの応答が途絶えました...復旧までお待ちください",
+            "running" : "絶賛監視中でございます！"
+          }[ this.status ] 
+          return text;
+        },
+      },
+      initialize: function(){
+        this.listenTo( this.model, "sync", this.render );
+      },
+    });
     var TestView = Marionette.ItemView.extend({
       template: "bempty/stall_template",
       initialize: function(){
         this.listenTo( this.model, 'sync', this.onSync  );
+        this.listenTo( this.model, 'request', this.onRequest  );
       },
       events: {
         "click .door-toggle": "onDoorToggleClick"
@@ -176,9 +203,15 @@ BEmpty.module("SubApp", {
         this.$('.HALF').removeClass("HALF");
         this.$('.OUTSIDE').toggleClass("OPEN");
       },
+      onRequest: function(){
+        this.$el.addClass("REQUESTING");
+      },
       onSync: function(){
+        this.$el.removeClass("REQUESTING");
         this.$('.OUTSIDE').removeClass("OPEN");
+        this.$('.OUTSIDE.VACANT').addClass("HALF");
         $door = this.$('.DOOR');
+
         $door.removeClass("occupied");
         $door.removeClass("vacant");
         $door.removeClass("unknown");
@@ -195,10 +228,11 @@ BEmpty.module("SubApp", {
       regions: {
         asl1Region: "#asl1",
         asl2Region: "#asl2",
-        tellMeRegion: "#tell-me"
+        tellMeRegion: "#tell-me",
+        deviceRegion: "#device"
       },
       initialize: function(options){
-        this.models = [  options.stall1, options.stall2 ];
+        this.models = [  options.stall1, options.stall2, options.device ];
       }
       ,
       onRefreshClick: function(){
@@ -211,6 +245,10 @@ BEmpty.module("SubApp", {
     });
 
 
+    var Device = Backbone.Model.extend({
+      urlRoot: '/devices',
+      idAttribute: 'name',
+    });
     var Stall = Backbone.Model.extend({
       urlRoot: '/stalls',
       idAttribute: 'name',
@@ -227,11 +265,13 @@ BEmpty.module("SubApp", {
 
       var stall1 = new Stall( App.data.bootstrapedAsl1 );
       var stall2 = new Stall( App.data.bootstrapedAsl2 );
-      var testLayout = new TestLayout( { stall1: stall1, stall2: stall2 } );
+      var device = new Device( App.data.bootstrapedDevice );
+      var testLayout = new TestLayout( { stall1: stall1, stall2: stall2, device: device } );
       App.main.show( testLayout );
       testLayout.asl1Region.show( new TestView( { model: stall1} ) );
       testLayout.asl2Region.show( new TestView( { model: stall2} ) );
       testLayout.tellMeRegion.show( new TellMeView( { asl1Model: stall1, asl2Model: stall2 } ) );
+      testLayout.deviceRegion.show( new DeviceView( { model: device} ) );
 
     });
 
@@ -257,7 +297,12 @@ function notifyMe() {
   // Let's check if the user is okay to get some notification
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
-    var notification = new Notification("空いたよ!!空いたよ!!　でももう閉まっちゃったかも...");
+    
+    var options = {
+      body: "はやくしないと閉まってしまうかも",
+      icon: AssetsPaths["notify_icon.png"]
+    } 
+    var notification = new Notification("空いたよ!!空いたよ!!", options);
   }
 
   // Otherwise, we need to ask the user for permission
@@ -283,7 +328,6 @@ function notifyMe() {
 
 $(document).ready(function(){
   $(document).on('click','.click-interactive', function(e){
-    console.log(e);
     window.ee = e;
     var $t = $( e.currentTarget );
     $t.addClass("on");

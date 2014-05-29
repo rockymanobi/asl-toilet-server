@@ -8,7 +8,8 @@ class StallsController < ApplicationController
   end
 
   def show
-    p params[:id]
+
+    sleep 1
     s = Stall.find_by( name: params[:id] )
     render json: s
   end

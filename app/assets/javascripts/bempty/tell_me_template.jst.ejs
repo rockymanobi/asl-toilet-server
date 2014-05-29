@@ -1,3 +1,7 @@
-<% if( bothOccupied() && isNotWaiting() ){ %>
-  <button class="TELL-ME tell-me-btn">空いたら教えて!!</button>
+<% if( bothOccupied()  ){ %>
+  <% if( isNotWaiting() ){ %>
+    <button class="TELL-ME tell-me-btn">空いたら教えて!!</button>
+  <% }else{ %>
+    >> ただいま監視中
+  <% } %>
 <% } %>

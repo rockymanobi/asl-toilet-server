@@ -1,6 +1,6 @@
 
 class DevicesController < ApplicationController
-  before_action :set_device, only: [:stop_monitoring,:start_monitoring , :heart_beat]
+  before_action :set_device, only: [:show, :stop_monitoring,:start_monitoring , :heart_beat]
   skip_before_filter :verify_authenticity_token, only: [:start_monitoring, :heart_beat, :stop_monitoring]
 
   def start_monitoring
@@ -9,6 +9,10 @@ class DevicesController < ApplicationController
     @device.status_updated_at = Time.now 
     @device.save!
     render json: nil
+  end
+
+  def show
+    render json: @device
   end
 
   def heart_beat

@@ -1,8 +1,11 @@
-<%= name %>
+<%= display_name %>
+<div class="LOADING-UNIT">
+  <img class="LOADING" src="<%= AssetsPaths["667142.gif"] %>">
+</div>
 <div class="DOOR <%= status %>">
-  <img class="VACANT OUTSIDE HALF door-toggle" src=<%= AssetsPaths["vacant.png"] %>>
+  <img class="VACANT OUTSIDE HALF door-toggle" src=<%= AssetsPaths["vacant_with_msg.png"] %>>
   <img class="VACANT INSIDE door-toggle" src="<%= AssetsPaths["vacant_out.png"] %>">
-  <img class="OCCUPIED OUTSIDE door-toggle" src="<%= AssetsPaths["occupied.png"] %>">
+  <img class="OCCUPIED OUTSIDE door-toggle" src="<%= AssetsPaths["occupied_with_msg.png"] %>">
   <img class="OCCUPIED INSIDE door-toggle" src="<%= AssetsPaths["occupied_out.png"] %>">
   <img class="UNKNOWN OUTSIDE" src="<%= AssetsPaths["unknown.png"] %>">
 </div>
