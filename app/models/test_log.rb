@@ -1,5 +1,10 @@
 class TestLog < ActiveRecord::Base
 
+  scope :date_at, ->( date ){
+    test_logs = TestLog.arel_table
+    where( test_logs[:created_at].lteq( date.end_of_day ) ).
+      where( test_logs[:created_at].gteq( date.beginning_of_day) )
+  }
 
   class << self
 
