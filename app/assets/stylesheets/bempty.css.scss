@@ -65,6 +65,9 @@ header.MAIN-HEADER{
       padding: 3px 15px;
       margin: 0px 10px;
     }
+    .ITEM:hover{
+      cursor: pointer;
+    }
 
   }
 
@@ -95,24 +98,37 @@ header.MAIN-HEADER{
 }
 
 
+.CTLS{
+  display: inline-block;
+  margin-right: 15px;
+}
+
+button:hover{
+  cursor: pointer;
+}
+
 button{
   font-size: 18px;
   border-radius: 8px;
   border: solid 2px orange;
   background-color: white;
   width: 300px;
-  height: 45px;
+  height: 55px;
   margin: 5px 0px;
 }
 
 button.TELL-ME{
   border-color: skyblue;
   -webkit-transform: scale(1,1);
+  -moz-transform: scale(1,1);
+  transform: scale(1,1);
   transition: all 1s;
 }
 
 button.TELL-ME.EXPAND{
   -webkit-transform: scale(1.1,1.1);
+  -moz-transform: scale(1.1,1.1);
+  transform: scale(1.1,1.1);
   transition: all 0.1s;
 }
 button.TELL-ME.SLOW{

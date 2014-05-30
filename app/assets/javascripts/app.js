@@ -105,7 +105,6 @@ BEmpty.module("SubApp", {
         }
         blink();
 
-
       },
       templateHelpers: {
       },
