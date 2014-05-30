@@ -107,7 +107,17 @@ button{
 
 button.TELL-ME{
   border-color: skyblue;
+  -webkit-transform: scale(1,1);
+  transition: all 1s;
 }
+
+button.TELL-ME.EXPAND{
+  -webkit-transform: scale(1.1,1.1);
+  transition: all 0.1s;
+}
+button.TELL-ME.SLOW{
+}
+
 
 
 

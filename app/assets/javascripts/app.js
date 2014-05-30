@@ -95,6 +95,17 @@ BEmpty.module("SubApp", {
           }
         }
         _.extend(this.templateHelpers, helpers);
+
+        var expand = _.bind( function(){  this.$('.TELL-ME').addClass("EXPAND")} ,this);
+        var toNormalSize = _.bind( function(){  this.$('.TELL-ME').removeClass("EXPAND")} ,this);
+        var blink = function(){
+          expand();
+          setTimeout( toNormalSize , 100 );
+          setTimeout( blink , 1000 );
+        }
+        blink();
+
+
       },
       templateHelpers: {
       },
