@@ -1,0 +1,15 @@
+.LABELS{
+  list-style: none;
+  width: 900px;
+  li{
+    float: left;
+    font-size: 9px;
+    margin: 0px 65px 0px 0px;
+  }
+
+}
+.CANVAS-WRAPPER{
+  width: 500px;
+  overflow-x: scroll;
+  border: 1px solid gray;
+}

@@ -13,10 +13,11 @@ Rails.application.routes.draw do
   resources :test_logs, only: [:index] do
   end
 
-  resource :data, only: [] do
+  resource :data, only: [:show] do
     collection do
       get :circle
       get :percent
+      get :log
     end
   end
 

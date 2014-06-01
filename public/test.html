@@ -12,13 +12,24 @@
   </head>
   <body>
     <h1>Canvas</h1>
-    <canvas id="canvassample" width="140" height="140"></canvas>
+    <canvas id="canvassample" width="500" height="140" style="border: solid 1px black"></canvas>
     <script type="text/javascript">
 
 onload = function() {
   draw();
 };
 function draw() {
+
+  var log = [
+    { val: 0, from: 0, length: 1000  },
+    { val: 1, from: 1000, length: 300  },
+    { val: 0, from: 1300, length: 100  },
+    { val: 1, from: 1400, length: 1000  },
+  ];
+  var totaLength = log.reduce( function( s,v ){ return s + v.length }, 0 );
+  var canvasWidth = 500;
+  var rate = canvasWidth / totaLength;
+
   /* canvas要素のノードオブジェクト */
   var canvas = document.getElementById('canvassample');
   /* canvas要素の存在チェックとCanvas未対応ブラウザの対処 */
@@ -29,11 +40,30 @@ function draw() {
   var ctx = canvas.getContext('2d');
   /* 四角を描く */
   ctx.beginPath();
-  ctx.moveTo(20, 20);
-  ctx.lineTo(120, 20);
-  ctx.lineTo(120, 0);
-  ctx.lineTo(150, 0);
-  ctx.lineTo(150, 1);
+  var height = 100;
+  ctx.moveTo(0, height);
+
+  var l = log.length;
+
+
+  for( var i = 0; i < l; i++ ){
+    var y = height - log[i].val * 20;
+    var x_from = log[i].from * rate;
+    var length = (function(){
+      if( log[i+1] !== void(0) ){
+      console.log("aba");
+        return log[i+1].from - log[i].from;
+      }else{
+      console.log("11aba");
+        return log[i].length
+      }
+    })();
+    var x_to = ( log[i].from + length ) * rate;
+
+    ctx.lineTo(x_from, y);
+    ctx.lineTo(x_to, y);
+  }
+
   ctx.stroke();
 }
 
