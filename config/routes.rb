@@ -38,4 +38,6 @@ Rails.application.routes.draw do
   resources :hoges do
   end
 
+  resources :tell_me_logs, only: [:create] do
+  end
 end

@@ -145,6 +145,10 @@ BEmpty.module("SubApp", {
         this.waiting = true;
         $('.tell-me-btn').addClass("hide");
         App.vent.trigger("timerStartKicked");
+        this.postLog();
+      },
+      postLog: function(){
+        $.post('/tell_me_logs', { dummy: 'dummy' })
       },
       timerStart: function(){
         notif({

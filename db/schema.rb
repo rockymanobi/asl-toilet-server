@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529132353) do
+ActiveRecord::Schema.define(version: 20140601234947) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "devices", force: true do |t|
     t.string   "name"
@@ -21,7 +24,7 @@ ActiveRecord::Schema.define(version: 20140529132353) do
     t.datetime "updated_at"
   end
 
-  add_index "devices", ["name"], name: "index_devices_on_name", unique: true
+  add_index "devices", ["name"], name: "index_devices_on_name", unique: true, using: :btree
 
   create_table "stalls", force: true do |t|
     t.string   "name"
@@ -33,8 +36,13 @@ ActiveRecord::Schema.define(version: 20140529132353) do
     t.datetime "status_updated_at"
   end
 
-  add_index "stalls", ["device_id"], name: "index_stalls_on_device_id"
-  add_index "stalls", ["name"], name: "index_stalls_on_name", unique: true
+  add_index "stalls", ["device_id"], name: "index_stalls_on_device_id", using: :btree
+  add_index "stalls", ["name"], name: "index_stalls_on_name", unique: true, using: :btree
+
+  create_table "tell_me_logs", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "test_logs", force: true do |t|
     t.string   "stall_name"
