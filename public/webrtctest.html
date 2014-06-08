@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+
+  <p id="MY-ID">CONNECTING..</p>
+  <input type="TEXT" id="TARGET">
+  <button id="CON">connect</button>
+  <br>
+
+  <input type="TEXT" id="MSG">
+  <button id="SEND">SEND</button>
+  <button id="REP">REP</button>
+
+	<div id="data"></div>
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="https://skyway.io/dist/0.3/peer.js"></script>
+	<script src="https://skyway.io/dist/0.3/peer.js"></script>
+	<script>
+    
+
+  $(document).ready(function(){
+    $('#CON').on('click', function(){
+      var target = $('#TARGET').val();
+      connect( target );
+    });
+    
+    $('#SEND').on('click', function(){
+      var target = $('#MSG').val();
+      send( target );
+    });
+
+    $('#REP').on('click', function(){
+      var target = $('#MSG').val();
+      answer( target );
+    });
+
+
+  });
+
+
+
+		var me = "";
+		var myID = ""; // ''
+		var peer = new Peer({key: myID});
+		var masterPeer = new Peer("hoge",{key: myID});
+
+    var masterConn = masterPeer.connect('hoge');
+    
+
+
+
+		peer.on('open', function(id) {
+      $('#MY-ID').html(id);
+		  console.log('My peer ID is: ' + id);
+		  me = id;
+		  //
+		});
+
+    var ansConn;
+    function answer( msg ){
+      ansConn.send( msg );
+    }
+
+    peer.on('connection', function(connection) {
+      console.log("connected!!");
+    // The `data` event is fired when data is received on the connection.
+      ansConn = connection.on('data', function(data) {
+        // Append the data to body.
+        console.log("hogehoge");
+        console.log("RCV",data);
+        appendMsg(data);
+      });
+    });
+
+
+		var conn;
+
+
+    function appendMsg(msg){
+      $('#data').append(msg + "<br>");
+    }
+
+		function connect( targetID ){
+		  conn = peer.connect( targetID);
+		  conn.on('open', function(){
+		  	console.log("connection opend!!");
+		  	conn.on( 'data', function(data){
+          appendMsg(data);
+		  		console.log('Rcv', data);
+		  	});
+		  });			
+
+
+
+		}
+
+		function send( msg ){
+			conn.send(msg);
+		}
+
+
+
+	</script>
+</body>
+</html>
