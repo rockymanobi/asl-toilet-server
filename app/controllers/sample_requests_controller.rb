@@ -29,6 +29,7 @@ class SampleRequestsController < ApplicationController
   end
 
   def sample_show
+    p "USER-AGENT:#{request.env["HTTP_USER_AGENT"]}"
     @device = Device.find_by( name: "asl" )
 
     @test_track_id = 
