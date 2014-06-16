@@ -5,7 +5,7 @@ class TestTrackLogsController < ApplicationController
     test_track_log.count += 1
     test_track_log.user_agent = params[:agent]
     test_track_log.save
-    p test_track_log
+    p "TRACKING - #{test_track_log.uuid}:#{test_track_log.count}" 
 
     render json: nil
   end
