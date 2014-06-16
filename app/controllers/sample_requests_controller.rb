@@ -110,7 +110,6 @@ class SampleRequestsController < ApplicationController
   end
 
   def decide_status( stall1, stall2 )
-    sleep 3
     return 'unknown' if stall1.is_unknown?
     return 'unknown' if stall2.is_unknown?
     return 'vacant' if stall1.is_vacant?
