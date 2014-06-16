@@ -278,7 +278,12 @@ BEmpty.module("SubApp", {
 
     var saveOrRestoreTrackId = function( trackId ){
       var key = "trackingId";
-      if( !localStorage ){ return trackId; }
+      try{
+        if( !localStorage ){ console.log("disable"); return trackId; }
+      }catch(e){
+        console.log("disable");
+        return trackId;
+      }
       if( localStorage.getItem( key ) ){ return localStorage.getItem( key ); }
 
       localStorage.setItem( key, trackId);
