@@ -20,7 +20,7 @@ class TestNotificationRequest < ActiveRecord::Base
 
       msg = "#{Time.now.strftime("%H時%M分")}に空いたよ!\nあなたを入れて#{reg_ids.count}人待ってるよ!" 
       gcm_post_message( reg_ids, 'トイレが空きました!', msg )
-      #reg_ids = TestNotificationRequest.delete_all
+      reg_ids = TestNotificationRequest.delete_all
     end
 
     def gcm_post_message( reg_ids, title,  msg )
