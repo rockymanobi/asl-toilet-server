@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616132244) do
+ActiveRecord::Schema.define(version: 20140616181558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,13 @@ ActiveRecord::Schema.define(version: 20140616132244) do
   create_table "test_logs", force: true do |t|
     t.string   "stall_name"
     t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "test_notification_requests", force: true do |t|
+    t.string   "device"
+    t.string   "reg_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -6,7 +6,9 @@ Rails.application.routes.draw do
       get :admin_console
     end
     collection do
+      get :both_stalls_status
       post :listen_heart_beat
+      post :notification_request_for_android
     end
   end
 

@@ -17,10 +17,12 @@ class StallsController < ApplicationController
   def sync_status
 
     raise "no such status" unless Stall::STATUSES.has_value? params[:status]
-    @stall.status_updated_at = Time.now if @stall.status != params[:status]
+    before_status = @stall.status
+    @stall.status_updated_at = Time.now if before_status != params[:status]
     @stall.status = params[:status]
     @stall.save!
 
+    TestNotificationRequest.notify_all if before_status == "occupied" && params[:status] != "occupied"
     render json: "stall #{@stall.name} is updated to #{@stall.status}"
   end
 

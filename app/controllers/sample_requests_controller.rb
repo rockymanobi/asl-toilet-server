@@ -3,7 +3,7 @@ class SampleRequestsController < ApplicationController
   before_action :set_test_stall, only: [:show, :edit, :update, :destroy]
   before_action :set_stall, only: [:sample_show]
 
-  skip_before_filter :verify_authenticity_token, only: [:listen_heart_beat]
+  skip_before_filter :verify_authenticity_token, only: [:notification_request_for_android, :listen_heart_beat]
   
   def index
     @stall = TestStall.first
@@ -25,6 +25,17 @@ class SampleRequestsController < ApplicationController
     ng_devices.update_all( status: Device::STATUSES[:error])
 
     render json: nil
+
+  end
+
+  def both_stalls_status
+    stall1 = Stall.find_by( name: 'asl1' )
+    stall2 = Stall.find_by( name: 'asl2' )
+    updated_at = (stall1.updated_at > stall2.updated_at)? stall1.updated_at : stall2.updated_at
+
+    
+
+    render json: { status: decide_status( stall1, stall2 ), updated_at: updated_at.strftime("%H時%M分") }
 
   end
 
@@ -68,6 +79,21 @@ class SampleRequestsController < ApplicationController
     render json: @stall 
   end
 
+  def notification_request_for_android
+
+    stall1 = Stall.find_by( name: 'asl1' )
+    stall2 = Stall.find_by( name: 'asl2' )
+    status = decide_status(stall1, stall2 )
+
+    if status == "occupied" 
+      notification_request = TestNotificationRequest.find_by( device: 'android', reg_id: params[:reg_id] ) || 
+        TestNotificationRequest.new( device: 'android', reg_id: params[:reg_id] ) 
+      notification_request.save!
+    end
+    count = TestNotificationRequest.count 
+
+    render json: { count: count, status: status  }
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -82,5 +108,15 @@ class SampleRequestsController < ApplicationController
   def member_params
     params.require(:member).permit(:name)
   end
+
+  def decide_status( stall1, stall2 )
+    sleep 3
+    return 'unknown' if stall1.is_unknown?
+    return 'unknown' if stall2.is_unknown?
+    return 'vacant' if stall1.is_vacant?
+    return 'vacant' if stall2.is_vacant?
+    'occupied'
+  end
+
 
 end

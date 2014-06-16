@@ -8,6 +8,16 @@ class Stall < ActiveRecord::Base
     occupied: "occupied" 
   }
 
+  def is_vacant?
+    self.status == STATUSES[ :vacant ]
+  end
+  def is_occupied?
+    self.status == STATUSES[ :occupied ]
+  end
+  def is_unknown?
+    self.status == STATUSES[ :unknown ]
+  end
+
   def create_log
     t = TestLog.new
     t.stall_name = self.name

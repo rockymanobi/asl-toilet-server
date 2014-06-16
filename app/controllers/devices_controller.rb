@@ -27,6 +27,7 @@ class DevicesController < ApplicationController
     @device.status_updated_at = Time.now 
     @device.save!
     @device.clear_all_stalls
+    TestNotificationRequest.apologize_all
     render json: @device
   end
 
