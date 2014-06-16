@@ -9,9 +9,9 @@ class TestStall < ActiveRecord::Base
 
       url = URI.parse("https://android.googleapis.com/gcm/send")
       message_data = {}
-      message_data["registration_ids"] = ["APA91bGz5gM3PaRUn7B1be7ehSyJIbUoJIhkJCVz4-t9Q7PZLCo6oNISz49PMn_KrNrSPMjCaFZ00fnuASl7hN3MUvh_crjL-MCuR9aH4NrQqE5nvvK0n9TC5jSIyzh4jPxCtag9G_m23gdP6LABFxeAxZ1YCA17Y1tdglULehZVQVFuBV0YVHE"] 
-      message_data["data"] = { message: "Hello!!!!" }
-      headers = { "Content-Type" => "application/json", "Authorization" => "key=" + "" }
+      message_data["registration_ids"] = ["APA91bHiYKG4dq6PyvEp7kmhk2R7lF2RmL4mbnRQ8b8Od3iBqWzO-gWPIP8Fp5g5Fs0O05vHxIQrvK72VggFZc4A0pqMwty3T1vcVntFl13iCDVBWld87vIQ_CjUcL2tqFYc3TyThsbZ4Dg2RhegSW2xc6t10YlGl7MFXS0-jlF1_LSYcqD1GvA"] 
+      message_data["data"] = { message: "SayHello!!!!" }
+      headers = { "Content-Type" => "application/json", "Authorization" => "key=" + "AIzaSyCj2kT7EnJwIfGcsWyRRJavy0XnTAdJ6gQ" }
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -20,7 +20,6 @@ class TestStall < ActiveRecord::Base
 
       if res.code == "200"
         res_message = "GCM Post Message Success."
-        return true, res_message
       else
         res_message = "GCM Post Message Failed."
       end

@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
 //= require turbolinks
 //= require moment/moment
 //= require d3/d3.min
@@ -20,6 +19,7 @@
 //
 //= require image_list
 //= require backbone.marionette/marionette_main
+//= require jquery_ujs
 //= require app
 //
 //

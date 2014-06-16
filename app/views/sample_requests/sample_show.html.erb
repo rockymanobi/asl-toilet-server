@@ -8,6 +8,7 @@
         bootstrapedAsl1: <%= Stall.find_by( name: 'asl1').to_json.html_safe %>,
         bootstrapedAsl2: <%= Stall.find_by( name: 'asl2').to_json.html_safe %>,
         bootstrapedDevice: <%= @device.to_json.html_safe %>,
+        try_track_id: "<%= @test_track_id %>"
       }
     });
 
@@ -30,6 +31,7 @@
       }
 
     }, 1000);
+
 
   });
 <% end %>

@@ -25,6 +25,7 @@ BEmpty = (function(Backbone, Marionette){
     App.data.bootstrapedAsl1 = options.data.bootstrapedAsl1
     App.data.bootstrapedAsl2 = options.data.bootstrapedAsl2
     App.data.bootstrapedDevice = options.data.bootstrapedDevice
+    App.data.try_track_id = options.data.try_track_id
   });
 
   App.startSubApp = function(appName, args){
@@ -275,6 +276,25 @@ BEmpty.module("SubApp", {
 
     });
 
+    var saveOrRestoreTrackId = function( trackId ){
+      var key = "trackingId";
+      if( !localStorage ){ return trackId; }
+      if( localStorage.getItem( key ) ){ return localStorage.getItem( key ); }
+
+      localStorage.setItem( key, trackId);
+      return trackId;
+    };
+    var getTrackUUID = function(){
+      var key = "trackingId";
+      if( !localStorage ){ return "no_storage" + App.data.try_track_id; }
+      return localStorage.getItem(key);
+    }
+
+    var postTrackLog = function(){
+      $.post( '/test_track_logs', { track_uuid: getTrackUUID, agent: navigator.userAgent } )
+    }
+
+
     SubApp.addInitializer(function(options){
 
       var stall1 = new Stall( App.data.bootstrapedAsl1 );
@@ -286,6 +306,10 @@ BEmpty.module("SubApp", {
       testLayout.asl2Region.show( new TestView( { model: stall2} ) );
       testLayout.tellMeRegion.show( new TellMeView( { asl1Model: stall1, asl2Model: stall2 } ) );
       testLayout.deviceRegion.show( new DeviceView( { model: device} ) );
+
+      console.log( saveOrRestoreTrackId( App.data.try_track_id)  );
+      console.log( App.data.try_track_id  );
+      postTrackLog();
 
     });
 

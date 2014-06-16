@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'uuidtools'
 
 group :development do
   gem 'sqlite3'

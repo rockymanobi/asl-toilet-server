@@ -30,6 +30,10 @@ class SampleRequestsController < ApplicationController
 
   def sample_show
     @device = Device.find_by( name: "asl" )
+
+    @test_track_id = 
+      Time.now.strftime("%Y%m%d%H%M%S") + UUIDTools::UUID.timestamp_create + UUIDTools::UUID.random_create 
+
     respond_to do |format|
       format.html { render }
       format.json { render @stall }
