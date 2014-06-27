@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :notice_messages
+
   root to: "home#index"
   resources :sample_requests, only: [:index, :show, :create] do
     member do

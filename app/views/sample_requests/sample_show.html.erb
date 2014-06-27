@@ -35,3 +35,17 @@
 
   });
 <% end %>
+
+<% if @notice_message.present? %>
+  <%= javascript_tag do %>
+    $(document).ready( function(){
+      notif({
+        type: "error",
+        msg: "<%= @notice_message.content %>",
+        width: "all",
+        position: "center",
+        autohide: false
+      });
+    });
+  <% end %>
+<% end %>

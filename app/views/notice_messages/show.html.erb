@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @notice_message.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @notice_message.content %>
+</p>
+
+<p>
+  <strong>From date:</strong>
+  <%= @notice_message.from_date %>
+</p>
+
+<p>
+  <strong>To date:</strong>
+  <%= @notice_message.to_date %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @notice_message.status %>
+</p>
+
+<%= link_to 'Edit', edit_notice_message_path(@notice_message) %> |
+<%= link_to 'Back', notice_messages_path %>

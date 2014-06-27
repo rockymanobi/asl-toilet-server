@@ -42,6 +42,7 @@ class SampleRequestsController < ApplicationController
   def sample_show
     p "USER-AGENT:#{request.env["HTTP_USER_AGENT"]}"
     @device = Device.find_by( name: "asl" )
+    @notice_message = NoticeMessage.availables.order(:created_at).last
 
     @test_track_id = 
       Time.now.strftime("%Y%m%d%H%M%S") + UUIDTools::UUID.timestamp_create + UUIDTools::UUID.random_create 
